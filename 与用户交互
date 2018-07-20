@@ -1,0 +1,75 @@
+'''
+1、什么是与用户交互
+    程序等待用户输入一些数据，然后程序执行完毕后为用户反馈信息
+
+2、为何程序要与用户交互
+    为了让计算机能够像人一样与用户的交互
+
+3、如何用
+    在python3中：
+        input
+'''
+# 在python3中，input会将用户输入的任何内容都存成字符串类型
+# name=input('请输入你的账号名: ') #name='123'
+# print(name,type(name))
+
+# 在python2中：raw_input会将用户输入的任何内容都存成字符串类型
+'''
+C:\Users\oldboy>python2
+Python 2.7.15 (v2.7.15:ca079a3ea3, Apr 30 2018, 16:30:26) [MSC v.1500 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> name=raw_input('>>>>>>>>>>>>>>>>>>>>>>>>>>>>: ')
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>: egon
+>>>
+>>>
+>>>
+>>> print(name)
+egon
+>>> print(name,type(name))
+('egon', <type 'str'>)
+>>>
+>>>
+>>> name=raw_input('>>>>>>>>>>>>>>>>>>>>>>>>>>>>: ')
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>: 1231231231232
+>>>
+>>>
+>>> print(name,type(name))
+('1231231231232', <type 'str'>)
+>>>
+>>>
+>>> name
+'1231231231232'
+>>> name,type(name)
+('1231231231232', <type 'str'>)
+'''
+
+#在python2中:input要求用户必须输入一个明确的数据类型，输入什么类型就存成什么类型
+'''
+>>> x=input("输入: ")
+输入: egon
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<string>", line 1, in <module>
+NameError: name 'egon' is not defined
+>>> x=input("输入: ")
+输入: 'egon'
+>>>
+>>> x,type(x)
+('egon', <type 'str'>)
+>>>
+>>>
+>>>
+>>> x=input("输入: ")
+输入: [1,2,3]
+>>>
+>>> x,type(x)
+([1, 2, 3], <type 'list'>)
+>>>
+>>>
+>>> y=raw_input('####: ')
+####: [1,2,2,3]
+>>>
+>>> y,type(y)
+('[1,2,2,3]', <type 'str'>)
+
+'''
