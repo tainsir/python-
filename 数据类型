@@ -1,0 +1,84 @@
+----03数据类型之数字类型
+#一：数字类型:int与float
+#1、整型：int
+#作用：记录年龄，等级，QQ号，各种号码
+#定义：
+# age=18 #age=int(18)
+# print(age,type(age))
+#使用
+
+
+#2、浮点型：float
+#作用：记录身高、体重、薪资
+#定义：
+# salary=3.1 #salary=float(3.1)
+# print(salary,type(salary))
+#使用：
+
+
+
+-----04数据类型之字符串类型
+#字符类型：str
+#作用：记录描述性质的数据，比如人的名字、性别、家庭地址、公司简介
+#定义：在引号内按照从左到右的顺序依次包含一个个字符，引号可以是单引号、双引号、三引号
+# name1='egon1'
+# print(type(name1))
+#
+# name2="egon2"
+# print(type(name2))
+
+# info="""
+# compay
+# name:OLDBOY
+# addr:SH
+# """ # 三引可以存多行
+# print(type(info))
+# print(info)
+
+# 注意引号的配对
+# print("my name is 'egon'")
+# print('my name is "egon"')
+
+# 使用：
+# x=1
+# y=2
+# print(x+y)
+# msg1='hello'
+# msg2='world'
+# print(msg1+msg2)
+
+# 强调：
+#1、字符串之间可以相加：
+# '1111'+2222
+#2、字符串相加是新申请内存空间然后拷贝相加的字符串到新的空间中，效率不高
+# print('my name is '+'egon'+' my age is '+'18')
+
+#3、字符串还可以做乘法运算
+# print('hello'*10)
+# print('='*100)
+
+-----05数据类型之列表类型
+# 列表类型：list
+#作用：记录/存多个值，可以方便地取出来指定位置的值，比如人的多个爱好，一堆学生姓名
+#定义：在[]内用逗号分隔开多个任意类型的值
+l=[10,3.1,'egon',['a','b']] # l=list([10,3.1,'egon',['a','b']])
+# print(l)
+# print(l[0])
+# print(l[2])
+# print(l[3])
+# print(l[3][1])
+
+# l1=['a','b',['c',['d',]]]
+# print(l1[2][1][0])
+print(type(l))
+
+#使用:
+# hobbies="read music sleep eat play"
+# hobbies=["read","music","sleep","eat","play"]
+# print(hobbies[2])
+
+students_info=[
+    ['egon',18,['play',]],
+    ['alex',18,['play','sleep']]
+]
+print(students_info[1][2][0])
