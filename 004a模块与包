@@ -1,0 +1,156 @@
+01.模块
+
+1 什么是模块
+    模块就是一系列功能的集合体
+        模块有三种来源
+            1. 内置的模块
+            2. 第三方的模块
+            3. 自定义模块
+        模块的格式:
+            1 使用python编写的.py文件
+        　　2 已被编译为共享库或DLL的C或C++扩展
+        　　3 把一系列模块组织到一起的文件夹（注：文件夹下有一个__init__.py文件，该文件夹称之为包）
+        　　4 使用C编写并链接到python解释器的内置模块
+
+2 为何要用模块
+    1. 使用内置的或者第三方模块的好处是: 拿来主义,可以极大提升开发效率
+    2. 使用自定义模块的好处是: 可以减少代码冗余(抽取我们自己程序中要公用的一些功能定义成模块,然后程序的各部分组件都去模块中调用共享的功能)
+
+3 如何用模块
+    大前提: 一定要区分开谁是执行文件,谁是被导入模块
+
+02.import导入模块
+
+    例如：(两个文件，一个是spam.py，另一个是run.py)
+          # 在另一个文件spam.py中：
+          #spam.py
+          # print('from the spam.py')
+          money=1000
+          def read1():
+              print('spam模块：',money)
+          def read2():
+              print('spam模块')
+              read1()
+          def change():
+              global money
+              money=0
+              
+              
+              
+          # 在另一个文件run.py中：
+          # 文件名是spam.py,模块名则是spam
+          # 首次导入模块发生3件事
+          # 1. 会产生一个模块的名称空间
+          # 2. 执行文件spam.py,将执行过程中产生的名字都放到模块的名称空间中
+          # 3. 在当前执行文件的名称空间中拿到一个模块名,该名字指向模块的名称空间
+          # import spam
+
+          # 之后的导入,都是直接引用第一次导入的成果,不会重新执行文件
+          # import spam
+          # import spam
+          # import spam
+
+          # 在执行文件中访问模块名称空间中名字的语法:模块名.名字
+          # import spam
+
+          # print(spam.x) # 指名道姓地跟spam要名字x,肯定不会与当前执行文件中的名字冲突
+
+          # x # 向当前执行文件的名称空间要名字
+
+          # money=11111111111111111111111
+          # print(spam.money)
+          # print(spam.read1)
+          # print(spam.read2)
+          # print(spam.change)
+
+          # spam.read1()
+          # def read1():
+          #     print('run.py --> read1')
+          # spam.read2()
+
+          # spam.change()
+          # print(spam.money)
+          # print(money)
+
+          # 总结import导入模块:在使用时必须加上前缀:模块名.
+          # 优点: 指名道姓地向某一个名称空间要名字,肯定不会与当前名称空间中的名字冲突
+          # 缺点: 但凡应用模块中的名字都需要加前缀,不够简洁
+
+
+          # 一行导入多个模块(不推荐)
+          # import spam,os,time
+
+          # 可以为模块起别名(注意:模块名应该全为小写)
+          import spam as sm
+          print(sm.money)
+          print(sm.read1)
+          
+         
+         
+03.from...import...导入模块
+
+    例如：(两个文件，一个是spam.py，另一个是run.py)
+          在文件spam.py中：
+          #spam.py
+          # print('from the spam.py')
+
+          __all__ = ['money','read1'] #from spam import *
+
+          money=1000
+
+          def read1():
+              print('spam模块：',money)
+
+          def read2():
+              print('spam模块')
+              read1()
+
+          def change():
+              global money
+              money=0
+              
+              
+              
+          在文件spam.py中：
+          # money=200
+          
+          # 首次导入模块发生3件事
+          # 1. 创建一个模块的名称空间
+          # 2. 执行文件spam.py,将执行过程中产生的名字都放到模块的名称空间中
+          # 3. 在当前执行文件中直接拿到一个名字,该名字就是执行模块中相对应的名字的
+
+          # from spam import money,read1,read2,change
+          # money=200
+          # print(money)
+
+          # read1=123
+          # read1()
+          # read2()
+
+          # change()
+          # print(money)
+
+
+
+          # 总结from...import...
+          # 优点: 使用时,无需再加前缀,更简洁
+          # 缺点: 容易与当前名称空间中的名字冲突
+
+          # *代表从被导入模块中拿到所有名字（不推荐使用）
+          # from spam import money,read1,read2,change
+          # from spam import * # __all__ = ['money','read1']
+          #
+          # print(money)
+          # print(read1)
+          # print(read2)
+          # print(change)
+
+          # 起别名
+          from spam import read1 as r1
+
+          r1()
+
+
+
+       
+        
