@@ -1,0 +1,246 @@
+01、RE模块
+
+在re_test.py中
+    """
+    RE是什么
+        正则 表达 式子
+        就是一些带有特殊含义的符号或者符号的组合
+    它的作用是对字符串进行过滤
+        在一堆字符串中找到你所关心的内容
+        你就需要告诉计算机你的过滤规则是什么样  通过什么方式来告诉计算机 就通过正则表达式
+    第一步 学习正则表达式 各种符号所表示的含义
+    re模块的内部实现 不是python 而是调用了c库
+
+
+"""
+
+import re
+
+# 待处理字符串
+src = "abcdef \t 12121gaa1a _ - a * / \n a"
+# 在字符串中查找所有满足条件的
+# print(re.findall("ab",src))
+
+# \w字母数字下划线    \W非字母数字下划线  与前面相反
+# print(re.findall("\w",src))
+# print(re.findall("\W",src))
+
+# \s 所有不可见字符   \S 可见字符
+# print(re.findall("\s",src))
+# print(re.findall("\S",src))
+
+# \d 所有数字    \D所有非数字
+# print(re.findall("\d",src))
+# print(re.findall("\d",src))
+
+# 特殊字符直接匹配
+# print(re.findall("\n",src))
+# print(re.findall("\t",src))
+
+# . 除了\n以外任意字符
+# print(re.findall(".",src))
+#
+# print(re.findall("\d","abcdef \t 12121gaa1a _ - a * / \n a"))
+
+
+#  \s \w \d . 都是匹配单个字符
+# 匹配重复字符   *  +  ? {}
+#  * 前面的表达式出现任意次
+# print(re.findall("\w\d*","1 12 aa"))
+
+#  +重复1次或多次
+# print(re.findall("\d+","1 12121272163871asas6378232678a aa"))
+
+# ?表示重复0次或1次
+# print(re.findall("\d?","aa bb a1c 1c1  123"))
+
+# {m,n} 最少m次 最多n次
+# print(re.findall("\d{1,3}","1  12  123 1234 "))
+
+# {m} 必须是m次
+print(re.findall("[a-z]{2}","a aa aaa ssss"))
+
+# {,m} 最大m次  0-m
+print(re.findall("[a-z]{,3}","a aa aaa a1aa"))
+
+
+# 从字符串1982asasa中找到所有0 1 2
+
+# 匹配范围
+# |       0|1|2   或
+# print(re.findall("0|1|2","1982asasa"))
+
+# [] 字符集合  括号内的符号不是整体
+# print(re.findall("[012]","1982asasa"))
+# ============================================ 在范围匹配时使用脱字符表示取反
+# 在这里表示除了0-9之外的任意字符
+# print(re.findall("[^012]","1982asasa"))
+
+# 请找出 所有的数字0-9和字母a-z A-Z  注意 减号只有在两个字符中间才有范围的意思 在两边都是普通字符
+# print(re.findall("[0-9a-zA-Z]","1982asa+sa"))
+
+
+# ^ 匹配行首
+# print(re.findall("^h","hellohello"))
+#
+# # $ 匹配行未  注意写在表达式后面
+# print(re.findall("[a-z]oh$","lohhel9ohelloh"))
+
+# 单词边界  指的是单词的末尾
+print(re.findall("h\\b","helloh hih"))
+
+print(re.findall("h\\B","hellhoh  hih"))
+
+# 双斜杠??
+print(re.findall("a\\\\c","aakakja\c"))
+
+
+
+# 贪婪匹配  *  +    不是固定的特殊符号  只是一种现象
+# 会一直匹配到不满足条件为止 用问号来阻止贪婪匹配(匹配最少满足条件的字符数)
+print(re.findall("\w+?","ajshsjkdsd"))
+
+print(re.findall("\w*?","ajshsjkdsd"))
+
+# 说明时候需要阻止贪婪
+
+src = "<img src='www.baidupic.shuaiqi1.jpg'><img src='www.baidupic.shuaiqi2.jpg'><img src='www.baidupic.shuaiqi3.jpg'>"
+
+# () 用于给正则表达式分组(group) 不会改变原来的表达式逻辑意义
+# 效果 优先取出括号内的内容
+
+# 请用正则表达式取图片地址
+print(re.findall("src='(.+?)'",src))
+
+# 了解 加上?: 可以取消括号中的优先级
+print(re.findall("src='(?:.+?)'",src))
+print(re.findall("src='(?:www).(?:baidupic)",src))
+
+
+
+
+在re.py中
+"""
+    re模块常用方法
+    findall   从左往右查找所有满足条件的字符  返回一个列表
+    search    返回第一个匹配的字符串  结果封装为对象 span=(0, 5) 匹配的位置 match匹配的值
+    match     匹配行首  返回值与search相同
+        对于search  match 匹配的结果通过group来获取
+    compile  将正则表达式 封装为一个正则对象 好处是可以重复使用这个表达式
+
+"""
+
+
+          import re     （span为跨度）
+          #print(re.search("hello"," world hello python"))#<_sre.SRE_Match object; span=(7, 12), match='hello'>
+          #print(re.match("hello"," world hello python"))#None
+          #print(re.split("hello","world hello python",maxsplit=0)) #['world ', ' python']
+
+          #
+          # pattern = re.compile("hello")
+          # print(pattern.search("world hello python",3))  #<_sre.SRE_Match object; span=(6, 11), match='hello'>
+
+          # print(re.sub("hello","gun","world hello Java"))  #world gun Java
+
+
+          # 现有字符串如下
+          # src = "c++|java|python|shell"
+          # 用正则表达式将c 和shell换位置
+          # print(re.sub("([a-zA-Z]+)|","",src))  
+
+          # 先用分组将 内容 分为三个  1.c++  2.|java|python| 3.shell
+          print(re.findall("(.+?)(\|.+\|)(.+)",src))  #[('c++', '|java|python|', 'shell')]
+
+          print(re.sub("(.+?)(\|.+\|)(.+)",r"\3\2\1",src))  #shell|java|python|c++
+
+
+          # print(re.search("(.+?)(\|.+)\|(.+)",src).group(3))
+          # print(re.sub("(.+)(\|.+\|)(.+)",r"\3\2\1",src))
+          # print(re.search("(.+?)\|",src))
+在re_练习.py中
+
+      """
+
+      """
+
+      import re
+      # 验证密码是否符合规则  不能少于8位  只能是数字字母下划线 最长16位
+      pwd = "12345678"
+
+      print(re.findall("\w{8,16}",pwd))
+
+      # 验证手机号码 长度11 全是数字  前三位是固定范围[189 131 150]
+      phone = "18962996185"
+      # print(re.findall("1(?:89|31|50)\d{8}",phone))
+      
+      
+      
+      002.subprocess
+      """
+    subprocess模块
+        sub       子
+        process  进程
+    什么是进程
+        正在进行中的程序   每当打开一个程序就会开启一个进程
+        每个进程包含运行程序所需的所有资源
+        正常情况下 不可以跨进程访问数据
+        但是有些情况写就需要访问别的进程数据   提供一个叫做管道的对象 专门用于跨进程通讯
+
+    作用:用于执行系统命令
+
+    常用方法
+        run     返回一个表示执行结果的对象
+        call    返回的执行的状态码
+
+    总结  subprocess的好处是可以获取指令的执行结果
+          subprocess执行指令时 可以在子进程中 这样避免造成主进程卡死
+    注意 管道的read方法和文件的read有相同的问题 read后光标会到文件末尾 导致第二次无法read到数据
+
+
+
+"""
+import subprocess
+# print(1)
+# res = subprocess.run("tasklist",shell=True,stdout=subprocess.PIPE)
+#
+# print("=====================================================")
+# print(res.stdout.decode("gbk"))
+#
+# print(res.stderr)
+
+
+# res = subprocess.call("tasklist",shell=True)
+# print(res)
+
+
+
+#  第一个进程a读取tasklist的内容   将数据交给另一个进程b  进程b将数据写到文件中
+res1 = subprocess.Popen("tasklist",stdout=subprocess.PIPE,shell=True,stderr=subprocess.PIPE)
+# print("hello")
+#print(res1.stdout.read().decode("gbk"))
+#print(res1.stderr.read().decode("gbk"))
+#
+res2 = subprocess.Popen("findstr cmd",stdout=subprocess.PIPE,shell=True,stderr=subprocess.PIPE,stdin=res1.stdout)
+print(res2.stdout.read().decode("gbk"))
+
+
+
+
+
+
+
+
+
+# res2 = subprocess.Popen("echo >a.txt", stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE,stdin=res1.stdout)
+# print(res2.stdout.read().decode("gbk"))
+#
+# res1=subprocess.Popen(r'',shell=True,stdout=subprocess.PIPE)
+# res=subprocess.Popen('findstr test*',shell=True,stdin=res1.stdout,stdout=subprocess.PIPE)
+# print(res.stdout.read().decode('gbk'))
+
+
+
+
+
+
+      
