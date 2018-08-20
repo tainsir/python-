@@ -1,0 +1,442 @@
+001面向对象编程介绍
+'''
+面向过程的编程思想
+    核心过程二字,过程指的是解决问题的步骤,即先干什么\再干什么\后干什么
+    基于该思想编写程序就好比在设计一条流水线,是一种机械式的思维方式
+
+    优点:复杂的问题流程化\进而简单化
+    缺点:可扩展性差
+
+面向对象的编程思想
+    核心是对象二字,对象是特征与技能的结合体
+    基于该思想编写程序(脑子始终想的是对象二字)就好比在创造一个世界,世界是由
+    一个个对象组成,在上帝眼里任何存在的事物都是对象,任何不存在的事物也都可以造
+    出来,是一种上帝式的思维方式
+
+    优点: 可扩展性强
+    缺点: 编程的复杂度要高与面向过程
+
+
+类:
+    对象是特征与技能的结合体,而类则是一系列对象相同的特征与技能的结合体
+    强调:
+        1.对象是具体存在的事物,而类则一个抽象的概念
+        2.站在不同的角度总结出的类与对象是不同的
+
+
+    在现实世界中:先有一个个具体存在的对象,然后随着人类文明的发展才总结出类的概念
+
+    在程序中: 先定义类,后调用类来产生对象
+
+
+站在老男孩选课系统的角度
+总结出现实世界中的老男孩学生对象:
+    学生对象1
+        特征
+            school='oldboy'
+            name='李铁蛋'
+            age=18
+            sex='male'
+
+        技能
+            选课
+
+    学生对象2
+        特征
+            school='oldboy'
+            name='赵钢弹'
+            age=38
+            sex='female'
+
+        技能
+            选课
+
+    学生对象3
+        特征
+            school='oldboy'
+            name='刘银弹'
+            age=28
+            sex='male'
+        技能
+            选课
+
+    老师对象1
+        特征
+            school='oldboy'
+            name='Egon'
+            age=18
+            sex='male'
+            level=10
+
+        技能
+            打分
+
+总结现实世界中的老男孩学生类
+    相同的特征
+        school='oldboy'
+    相同的技能
+        选课
+
+在程序中....
+'''
+
+
+
+002类的使用
+'''
+站在老男孩选课系统的角度
+总结出现实世界中的老男孩学生对象:
+    学生对象1
+        特征
+            school='oldboy'
+            name='李铁蛋'
+            age=18
+            sex='male'
+
+        技能
+            选课
+
+    学生对象2
+        特征
+            school='oldboy'
+            name='赵钢弹'
+            age=38
+            sex='female'
+
+        技能
+            选课
+
+    学生对象3
+        特征
+            school='oldboy'
+            name='刘银弹'
+            age=28
+            sex='male'
+        技能
+            选课
+
+总结现实世界中的老男孩学生类
+    相同的特征
+        school='oldboy'
+    相同的技能
+        选课
+'''
+#在程序中
+#1. 先定义类
+class OldboyStudent:
+    #相同的特征
+    school = 'oldboy'
+
+    #相同的技能
+    def choose_course(self):
+        print('choosing course')
+
+    # print('===>>>')
+#类是一系列对象相同的特征(变量)与技能(函数)的结合体,即类体中最常见的就是变量与函数的定义
+# 但其实类体中是可以存在任意python代码的
+# 类体代码会在类定义阶段立即执行,会产生一个类名称空间,用来将类体代码执行过程中产生的名字都丢进去,查看方式如下
+# print(OldboyStudent.__dict__) # 查看类的名称空间
+# print(OldboyStudent.school) #print(OldboyStudent.__dict__['school'])
+# print(OldboyStudent.choose_course)
+# OldboyStudent.school='OLDBOY' #OldboyStudent.__dict__['school']='OLDBOY'
+# OldboyStudent.country='China' #OldboyStudent.__dict__['country']='China'
+# del OldboyStudent.country # del OldboyStudent.__dict__['country']
+# print(OldboyStudent.__dict__)
+
+OldboyStudent.choose_course(123123)
+# 总结:
+#1. 类本质就是一个名称空间,或者说是一个用来存放变量与函数的容器
+#2. 类的用途之一就是当做名称空间从其内部取出名字来使用
+#3. 类的用途之二是调用类来产生对象
+
+
+
+#2. 后调用类来产生对象
+
+
+
+003对象的使用
+'''
+学生对象1
+        特征
+            school='oldboy'
+            name='李铁蛋'
+            age=18
+            sex='male'
+        技能
+            选课
+
+    学生对象2
+        特征
+            school='oldboy'
+            name='赵钢弹'
+            age=38
+            sex='female'
+        技能
+            选课
+
+    学生对象3
+        特征
+            school='oldboy'
+            name='刘银弹'
+            age=28
+            sex='male'
+        技能
+            选课
+'''
+
+class OldboyStudent:
+    #相同的特征
+    school = 'oldboy'
+
+    #相同的技能
+    def choose_course(self):
+        print('choosing course')
+
+#2. 后调用类来产生对象:
+# 调用类的过程称之为类的实例化,调用类的返回值称之为类的一个对象/实例
+
+
+# 调用类发生了?
+# 1. 会产生一个对象,然后返回
+
+stu1=OldboyStudent()
+stu2=OldboyStudent()
+stu3=OldboyStudent()
+
+# print(stu1.__dict__)
+# print(stu2.__dict__)
+# print(stu3.__dict__)
+
+
+# 为对象定制自己独有的特征
+'''
+# name='李铁蛋'
+# age=18
+# sex='male'
+stu1.name='李铁蛋'
+stu1.age=18
+stu1.sex='male'
+
+print(stu1.__dict__)
+
+# name='赵钢弹'
+# age=38
+# sex='female'
+stu2.name='赵钢弹'
+stu2.age=38
+stu2.sex='female'
+
+print(stu2.__dict__)
+
+# name='刘银弹'
+# age=28
+# sex='male'
+stu3.name='刘银弹'
+stu3.age=28
+stu3.sex='male'
+
+print(stu3.__dict__)
+'''
+
+# 为对象定制自己独有的特征,简化方案一:
+'''
+def init(obj,name,age,sex):
+    obj.name = name
+    obj.age = age
+    obj.sex = sex
+
+# stu1.name='李铁蛋'
+# stu1.age=18
+# stu1.sex='male'
+init(stu1,'李铁蛋',18,'male')
+
+# stu2.name='赵钢弹'
+# stu2.age=38
+# stu2.sex='female'
+init(stu2,'赵钢弹',38,'female')
+
+# stu3.name='刘银弹'
+# stu3.age=28
+# stu3.sex='male'
+init(stu3,'刘银弹',28,'male')
+
+print(stu1.__dict__)
+print(stu2.__dict__)
+print(stu3.__dict__)
+'''
+
+
+# 为对象定制自己独有的特征,简化方案二:
+class OldboyStudent:
+    #相同的特征
+    school = 'oldboy'
+
+    #           stu1,'李铁蛋',18,'male'
+    def __init__(obj, name, age, sex):
+        obj.name = name #stu1.name='李铁蛋'
+        obj.age = age   #stu1.age=18
+        obj.sex = sex   #stu1.sex='male'
+
+    #相同的技能
+    def choose_course(self):
+        print('choosing course')
+
+# 调用类发生了
+# 1. 先产生一个空对象stu1,然后返回
+# 2. 触发类中函数__init__的执行,将对象连同调用类括号内指定的参数一同传入__init__(stu1,'李铁蛋',18,'male')
+
+stu1=OldboyStudent('李铁蛋',18,'male') #__init__(stu1,'李铁蛋',18,'male')
+stu2=OldboyStudent('赵钢弹',38,'female') #__init__(stu2,'赵钢弹',38,'female')
+stu3=OldboyStudent('刘银弹',28,'male') #__init__(stu3,'刘银弹',28,'male')
+
+
+# print(stu1.__dict__)
+# print(stu2.__dict__)
+# print(stu3.__dict__)
+# 总结__init__的功能: 是在实例化时就为对象初始自己独有的特征
+# 注意:不能有返回值
+
+# stu1.xxx=111
+# print(stu1.__dict__)
+
+
+
+
+004属性查找
+xxx=33333
+class OldboyStudent:
+    school = 'oldboy'
+    # xxx=2222
+    yyy=333
+    count=0
+
+    def __init__(obj, name, age, sex):
+        # print(OldboyStudent.yyy)
+        # print(obj.yyy)
+
+        OldboyStudent.count+=1
+        obj.name = name #stu1.name='李铁蛋'
+        obj.age = age   #stu1.age=18
+        obj.sex = sex   #stu1.sex='male'
+
+    def choose_course(self):
+        print('choosing course')
+
+# 1. 属性查找顺序
+# stu1=OldboyStudent('李铁蛋',18,'male')
+# print(stu1.__dict__)
+# print(OldboyStudent.__dict__)
+# stu1.xxx=111
+# print(stu1.__dict__)
+# 先从对象自己的名称空间找,没有则去所属的类中找
+# print(stu1.xxx)
+
+# 2.
+stu1=OldboyStudent('李铁蛋',18,'male')
+stu2=OldboyStudent('赵钢弹',38,'female')
+stu3=OldboyStudent('刘银弹',28,'male')
+# print(stu1.count)
+# print(stu2.count)
+# print(stu3.count)
+# print(OldboyStudent.count)
+
+# 类中定义的变量是所有对象共享的,对象可以来用,类也可以来使用,类一旦改变自己的数据属性的值,所有的对象都能感知到
+# print(id(stu1.school))
+# print(id(stu2.school))
+# print(id(stu3.school))
+# print(id(OldboyStudent.school))
+
+# stu1.school=123
+# # OldboyStudent.school='OLDBOY'
+# print(stu1.__dict__)
+# print(stu2.__dict__)
+# print(stu3.__dict__)
+# print(OldboyStudent.__dict__)
+#
+# print(OldboyStudent.school)
+# print(stu1.school)
+# print(stu2.school)
+# print(stu3.school)
+
+
+
+
+# print(id(stu1.choose_course))
+# print(id(stu2.choose_course))
+# print(id(stu3.choose_course))
+
+
+
+
+
+005绑定方法
+#类中定义的变量是类的数据属性,类可以用,对象也可以用,大家都指向同一个内存地址,类变量值一旦改变所有对象都跟着变
+
+#类中定义的函数是类的函数属性,类可以用,类来调用就是一个普通的函数,但其实类中定义的函数是给对象用的,而且是绑定给对象用的
+# 绑定???
+class OldboyStudent:
+    school = 'oldboy'
+
+    def __init__(self, name, age, sex):
+        self.name = name #stu1.name='李铁蛋'
+        self.age = age   #stu1.age=18
+        self.sex = sex   #stu1.sex='male'
+
+    def choose_course(self,x): #self=stu1
+        print('%s choosing course' %self.name)
+
+
+
+stu1=OldboyStudent('李铁蛋',18,'male')
+stu2=OldboyStudent('赵钢弹',38,'female')
+stu3=OldboyStudent('刘银弹',28,'male')
+
+# 1. 类的函数: 该传几个参数就传几个
+# print(OldboyStudent.__init__)
+# print(OldboyStudent.choose_course)
+# OldboyStudent.choose_course(stu1)
+
+# 2. 绑定方法,指向类的函数: 特殊之处是绑定给谁就应该由谁来调用,谁来调用就会将谁当做第一个参数自动传入
+# print(stu1.choose_course)
+# print(stu2.choose_course)
+# print(stu3.choose_course)
+
+# stu1.choose_course(123) #OldboyStudent.choose_course(stu1,123)
+# stu2.choose_course(123)
+# stu3.choose_course(123)
+
+
+stu1.choose_course()
+
+
+
+
+006一切皆对象
+
+# 在python3中统一了类与类型的概念
+
+class Foo:
+    pass
+
+# print(Foo)
+# obj=Foo()
+# print(type(obj))
+
+# print(int)
+# age=10 #age=int(10)
+# print(type(age))
+
+# print(dict)
+
+
+l1=[1,2,3] #l1=list([1,2,3])
+# print(type(l1))
+# l1.append(4)
+# print(l1)
+
+l1.append(4) # list.append(l1,4)
+print(l1)
+
+l2=['a','b','c'] #l2=list(['a','b','c'])
+l2.append('d')
