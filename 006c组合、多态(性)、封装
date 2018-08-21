@@ -1,0 +1,519 @@
+001：组合
+'''
+1. 什么是组合
+    组合指的是某一个对象拥有一个属性,该属性的值是另外一个类的对象
+    class Foo:   #属性
+        pass
+
+    class Bar:
+        pass
+
+    obj=Foo()    #属性的值
+    obj.attr=Bar()
+
+    obj.xxx
+    obj.attr.yyy
+
+2. 为何要用组合
+    通过为某一个对象添加属性(属性的值是另外一个类的对象)的方式,可以间接地将两个类关联/整合/组合到一起
+    从而减少类与类之间代码冗余
+
+    class Foo1:
+        pass
+    class Foo2:
+        pass
+    class Foo3:
+        pass
+
+    class Bar:
+        pass
+
+    obj_from_bar=Bar()
+
+    obj1=Foo1()
+    obj2=Foo2()
+    obj3=Foo3()
+
+    obj1.attr1=obj_from_bar
+    obj2.attr2=obj_from_bar
+    obj3.attr3=obj_from_bar
+
+
+3. 如何用组合
+
+class OldboyPeople:
+    school = 'Oldboy'
+
+    def __init__(self,name,age,sex,):
+        self.name = name
+        self.age = age
+        self.sex = sex
+
+class OldboyStudent(OldboyPeople):
+    def __init__(self, name, age, sex,score=0):
+        OldboyPeople.__init__(self,name,age,sex)
+        self.score = score
+
+    def choose_course(self):
+        print('%s choosing course' % self.name)
+
+class OldboyTeacher(OldboyPeople):
+    def __init__(self,name,age,sex,level):
+        OldboyPeople.__init__(self,name,age,sex)
+        self.level=level
+
+    def score(self,stu,num):
+        stu.score=num
+
+class Course:
+    def __init__(self,c_name,c_price,c_period):
+        self.c_name = c_name
+        self.c_price = c_price
+        self.c_period = c_period
+
+    def tell_info(self):
+        print('<课程名:%s 价钱:%s 周期:%s>' %(self.c_name,self.c_price,self.c_period))
+
+# 创建课程对象
+python=Course('python全栈开发',1900,'5mons')
+linux=Course('linux架构师',900,'3mons')
+
+
+stu1=OldboyStudent('刘二蛋',38,'male')
+stu1.course=python
+# print(stu1.__dict__)
+
+stu1.course.tell_info()
+
+
+tea1=OldboyTeacher('egon',18,'male',10)
+tea1.course=python
+# print(tea1.__dict__)
+tea1.course.tell_info()
+'''
+
+
+
+class OldboyPeople:
+    school = 'Oldboy'
+
+    def __init__(self,name,age,sex,):
+        self.name = name
+        self.age = age
+        self.sex = sex
+
+class OldboyStudent(OldboyPeople):
+    def __init__(self, name, age, sex,score=0):
+        OldboyPeople.__init__(self,name,age,sex)
+        self.score = score
+        self.courses=[]
+
+    def choose_course(self):
+        print('%s choosing course' % self.name)
+
+    def tell_all_course(self):
+        print(('学生[%s]选修的课程如下' %self.name).center(50,'='))
+        for obj in self.courses:
+            obj.tell_info()
+        print('='*60)
+
+class OldboyTeacher(OldboyPeople):
+    def __init__(self,name,age,sex,level):
+        OldboyPeople.__init__(self,name,age,sex)
+        self.level=level
+        self.courses=[]
+
+    def score(self,stu,num):
+        stu.score=num
+
+    def tell_all_course(self):
+        print(('老师[%s]教授的课程如下' %self.name).center(50,'*'))
+        for obj in self.courses:
+            obj.tell_info()
+        print('*'*70)
+
+class Course:
+    def __init__(self,c_name,c_price,c_period):
+        self.c_name = c_name
+        self.c_price = c_price
+        self.c_period = c_period
+
+    def tell_info(self):
+        print('<课程名:%s 价钱:%s 周期:%s>' %(self.c_name,self.c_price,self.c_period))
+
+# 创建课程对象
+python=Course('python全栈开发',1900,'5mons')
+linux=Course('linux架构师',900,'3mons')
+
+
+stu1=OldboyStudent('刘二蛋',38,'male')
+stu1.courses.append(python)
+stu1.courses.append(linux)
+# print(stu1.courses)
+stu1.tell_all_course()
+
+
+tea1=OldboyTeacher('egon',18,'male',10)
+tea1.courses.append(python)
+# print(tea1.courses)
+tea1.tell_all_course()
+
+002多态与多态性
+'''
+1. 什么是多态
+    多态指的是同一种/类事物的不同形态
+
+2. 为何要用多态
+    多态性:在多态的背景下,可以在不用考虑对象具体类型的前提下而直接使用对象
+    多态性的精髓:统一
+
+3. 如何用多态
+
+
+'''
+'''
+class Animal:
+    def speak(self):
+        pass
+
+class People(Animal):
+    def shuo(self):
+        print('say hello')
+
+class Dog(Animal):
+    def jiao(self):
+        print('汪汪汪')
+
+class Pig(Animal):
+    def chang(self):
+        print('哼哼哼')
+
+
+obj1=People()
+obj2=Dog()
+obj3=Pig()
+
+
+# obj1.speak()
+# obj2.speak()
+# obj3.speak()
+
+def speak(animal):
+    animal.speak()
+
+
+speak(obj1)
+speak(obj2)
+speak(obj3)
+
+s1='hello'
+l1=[1,2,3]
+t1=(1,2)
+
+# changdu(s1)
+# size(l1)
+# kuangdu(t1)
+
+
+print(len(s1)) #s1.__len__()
+print(len(l1)) #l1.__len__()
+print(len(t1)) #t1.__len__()
+'''
+import abc
+
+class Animal(metaclass=abc.ABCMeta):
+    @abc.abstractmethod
+    def speak(self):
+        pass
+
+    @abc.abstractmethod
+    def run(self):
+        pass
+
+# Animal() # 父类只是用来建立规范的,不能用来实例化的,更无需实现内部的方法
+
+class People(Animal):
+    def speak(self):
+        print('say hello')
+
+    def run(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        print('汪汪汪')
+
+    def run(self):
+        pass
+
+class Pig(Animal):
+    def speak(self):
+        print('哼哼哼')
+
+    def run(self):
+        pass
+
+obj1=People()
+obj2=Dog()
+obj3=Pig()
+
+
+# python崇尚鸭子类型
+class Disk:
+    def read(self):
+        print('Disk read')
+
+    def write(self):
+        print('Disk write')
+
+
+class Memory:
+    def read(self):
+        print('Mem read')
+
+    def write(self):
+        print('Mem write')
+
+
+class Cpu:
+    def read(self):
+        print('Cpu read')
+
+    def write(self):
+        print('Cpu write')
+
+
+obj1=Disk()
+obj2=Memory()
+obj3=Cpu()
+
+obj1.read()
+obj2.read()
+obj3.read()
+
+
+
+003.封装
+'''
+1. 什么是封装
+    装:往容器/名称空间里存入名字
+    封:代表将存放于名称空间中的名字给藏起来,这种隐藏对外不对内
+
+2. 为何要封装
+    封数据属性:???
+    封函数属性:???
+
+3. 如何封装
+    在类内定义的属性前加__开头(没有__结果)
+    总结:
+        1. __开头的属性实现的隐藏仅仅只是一种语法意义上的变形,并不会真的限制类外部的访问
+        2. 该变形操作只在类定义阶段检测语法时发生一次,类定义阶段之后新增的__开头的属性并不会变形
+        3. 如果父类不想让子类覆盖自己的属性,可以在属性前加__开头
+'''
+class Foo:
+    __x=111 # _Foo__x
+    __y=222 # _Foo__y
+
+    def __init__(self,name,age):
+        self.__name=name
+        self.__age=age
+
+    def __func(self): #_Foo__func
+        print('func')
+
+    def get_info(self):
+        print(self.__name,self.__age,self.__x) #print(self._Foo__name,self._Foo__age,self._Foo__x)
+
+# print(Foo.__x)
+# print(Foo.__func)
+# print(Foo.__dict__)
+# print(Foo._Foo__x)
+# print(Foo._Foo__y)
+# Foo.__z=333
+# print(Foo.__dict__)
+# print(Foo.__z)
+
+
+obj=Foo('egon',18)
+# print(obj.__dict__)
+# print(obj.__name)
+# print(obj.__age)
+# obj.get_info()
+
+obj.__sex='male'
+# print(obj.__dict__)
+# print(obj.__sex)
+
+
+# obj.get_info()
+# 1. __开头的属性到底如何实现的隐藏?
+# 2. 如何实现的对外隐藏,对内不隐藏
+
+
+
+class Foo:
+    def __f1(self): #_Foo__f1
+        print('Foo.f1')
+
+    def f2(self):
+        print('Foo.f2')
+        self.__f1() #obj._Foo__f1()
+
+class Bar(Foo):
+    def __f1(self): # _Bar__f1
+        print('Bar.f1')
+
+
+obj=Bar()
+
+# obj.f2()
+'''
+Foo.f2
+Bar.f1
+'''
+
+# 封装数据属性:将数据属性隐藏起来,类外就无法直接操作属性,需要类内开辟一个接口来外部的使用可以间接地操作属性,可以在接口内定义任意的控制逻辑,
+# 从而严格控制使用对属性的操作
+
+
+class People:
+    def __init__(self,name,age):
+        self.__name=name
+        self.__age=age
+
+    def tell_info(self):
+        print('<name:%s age:%s>'  %(self.__name,self.__age))
+
+    def set_info(self,name,age):
+        if type(name) is not str:
+            print('名字必须是str类型傻叉')
+            return
+        if type(age) is not int:
+            print('年龄必须是int类型傻叉')
+            return
+        self.__name=name
+        self.__age=age
+
+
+obj=People('egon',18)
+# obj.tell_info()
+
+# obj.set_info('EGON',19)
+# obj.set_info(123,19)
+obj.set_info('EGON','18')
+obj.tell_info()
+
+
+
+# 封装函数属性:隔离复杂度
+class ATM:
+    def __card(self):
+        print('插卡')
+    def __auth(self):
+        print('用户认证')
+    def __input(self):
+        print('输入取款金额')
+    def __print_bill(self):
+        print('打印账单')
+    def __take_money(self):
+        print('取款')
+
+    def withdraw(self):
+        self.__card()
+        self.__auth()
+        self.__input()
+        self.__print_bill()
+        self.__take_money()
+
+a=ATM()
+a.withdraw()
+
+
+
+
+004.property
+
+
+
+
+# property装饰器是用来将类内的函数属性伪装成数据属性
+# class People:
+#     def __init__(self,name,weight,height):
+#         self.name=name
+#         self.weight=weight
+#         self.height=height
+#
+#     @property
+#     def bmi(self):
+#         return self.weight / (self.height ** 2)
+#
+# obj=People('egon',80,1.83)
+# obj.height=1.85
+# obj.weight=75
+
+# print(obj.bmi())
+# print(obj.bmi)
+
+
+# 了解....
+# class People:
+#     def __init__(self,name):
+#         self.__name=name
+#
+#     @property
+#     def name(self):
+#         return '<名字:%s>' %self.__name
+#
+#     @name.setter
+#     def name(self,obj):
+#         if type(obj) is not str:
+#             print('name必须为str类型')
+#             return
+#         self.__name=obj
+#
+#     @name.deleter
+#     def name(self):
+#         # print('不让删')
+#         del self.__name
+#
+# obj=People('egon')
+#
+# # print(obj.name)
+# # obj.name='EGON'
+# # obj.name=123
+# # print(obj.name)
+#
+# del obj.name
+# print(obj.__dict__)
+
+
+
+
+class People:
+    def __init__(self,name):
+        self.__name=name
+
+    def get_name(self):
+        return '<名字:%s>' %self.__name
+
+    def set_name(self,obj):
+        if type(obj) is not str:
+            print('name必须为str类型')
+            return
+        self.__name=obj
+
+    def del_name(self):
+        # print('不让删')
+        del self.__name
+
+    name=property(get_name,set_name,del_name)
+
+obj=People('egon')
+
+# print(obj.name)
+# obj.name='EGON'
+# obj.name=123
+# print(obj.name)
+
+del obj.name
+print(obj.__dict__)
