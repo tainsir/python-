@@ -1,0 +1,306 @@
+#01. 绑定
+# 类中定义的函数有两大类(3小种)用途,一类是绑定方法,另外一类是非绑定方法
+
+# 1. 绑定方法:
+# 特点:绑定给谁就应该由谁来调用,谁来调用就会将谁当作第一个参数自动传入
+# 1.1 绑定给对象的:类中定义的函数默认就是绑定对象的
+# 1.2 绑定给类的:在类中定义的函数上加一个装饰器classmethod
+
+
+# 2. 非绑定方法
+# 特点: 既不与类绑定也不与对象绑定,意味着对象或者类都可以调用,但无论谁来调用都是一个普通函数,根本没有自动传值一说
+#
+
+
+# class Foo:
+#     def func1(self):
+#         print('绑定给对象的方法',self)
+#
+#     @classmethod
+#     def func2(cls):
+#         print('绑定给类的方法: ',cls)
+#
+#     @staticmethod
+#     def func3():
+#         print('普通函数')
+#
+#
+# obj=Foo()
+
+# obj.func1()
+# print(obj)
+
+# Foo.func2()
+
+# 绑定方法
+# print(obj.func1)
+# print(Foo.func2)
+
+#非绑定方法
+# print(obj.func3)
+# print(Foo.func3)
+
+
+
+import settings
+
+class Mysql:
+    def __init__(self,ip,port):
+        self.id=self.create_id()
+        self.ip=ip
+        self.port=port
+
+    def tell_info(self):
+        print('%s:%s:%s' %(self.id,self.ip,self.port))
+
+    @classmethod
+    def from_conf(cls):
+        return cls(settings.IP, settings.PORT)
+
+    @staticmethod
+    def create_id():
+        import uuid
+        return uuid.uuid4()
+
+# obj=Mysql('1.1.1.1',3306)
+# obj.tell_info()
+
+
+obj1=Mysql.from_conf()
+
+obj1.tell_info()
+
+
+# 输出为
+# 6d4fea4c-d43a-40e0-9f50-dcdd1a45d8a6:10.10.10.3:3306
+
+
+#==========================================================================================
+02
+
+# class Foo:
+#     def f1(self):
+#         print(self)
+#     @classmethod     #类方法
+#     def f2(cls):
+#         print(cls)
+#     @staticmethod     #静态方法
+#     def f3(x,y):
+#         print('f3',x+y)
+# #
+# obj=Foo()
+
+# print(obj.f1)
+# obj.f1()
+#输出为<bound method Foo.f1 of <__main__.Foo object at 0x101c5c898>>
+#     <__main__.Foo object at 0x101c5c860>
+
+
+# print(Foo.f2)
+# Foo.f2()
+#输出为以下
+# <bound method Foo.f2 of <class '__main__.Foo'>>
+# <class '__main__.Foo'>
+
+
+# print(obj.f2)
+# obj.f2()
+#输出为以下
+# <bound method Foo.f2 of <class '__main__.Foo'>>
+# <class '__main__.Foo'>
+
+
+# print(Foo.f3)        #输出<function Foo.f3 at 0x101c459d8>
+# print(obj.f3)        #同上输出<function Foo.f3 at 0x101c459d8>
+
+
+# Foo.f3(1,2)           #输出 f3 3
+# obj.f3(3,4)           #输出 f3 7
+
+
+
+
+
+
+
+import settings
+
+class MySql:
+
+ def __init__(self, ip, port):
+  self.id=self.creat_id()
+  self.ip=ip
+  self.port=port
+
+ def tell_info(self):
+  print('<id:%s  ip:%s port:%s>'%(self.id, self.ip, self.port))
+
+ @classmethod
+ def from_conf(cls):
+  return cls(settings.IP, settings.PORT)
+
+ @staticmethod
+ def creat_id():
+  import uuid
+  return uuid.uuid4()
+# obj1=MySql('1.1.1.1',2306)
+# obj1.tell_info()
+
+obj2=MySql.from_conf()
+obj2.tell_info()
+
+#输出为
+# <id:ab5bd725-edba-48f1-bde5-ee582d174a90  ip:1.1.1.1 port:2306>
+
+#==========================================================================================
+03.反射
+# class Foo:
+#     pass
+#
+# class Bar(Foo):
+#     pass
+#
+#
+# obj=Bar()
+#
+# # print(isinstance(obj,Bar))
+# # print(isinstance([],list))
+#
+# print(issubclass(Bar,Foo))
+
+
+
+# 反射:指的是通过字符串来操作属性
+class Foo:
+    def __init__(self,name):
+        self.name=name
+
+obj=Foo('egon')
+
+# hasattr()
+# print(hasattr(obj,'name')) #'name' in obj.__dict__,输出True
+
+# getattr()
+# print(getattr(obj,'name')) #obj.__dict__['name'] ，输出egon
+# print(getattr(obj,'age')) #obj.__dict__['age']   #无参数，报错
+# print(getattr(obj,'age',None)) #obj.__dict__['age']，输出None
+
+# setattr()   #不存在的属性，增加属性
+setattr(obj,'age',18) #obj.age=18
+setattr(obj,'name','EGON') #obj.name='EGON'
+# print(obj.__dict__)  #输出为{'name': 'EGON', 'age': 18}
+
+# delattr()
+# delattr(obj,'name')# del obj.name
+# print(obj.__dict__)   #{'age': 18}
+
+
+
+# class Ftp:
+#     def get(self):
+#         print('get')
+#
+#     def put(self):
+#         print('put')
+#
+#     def login(self):
+#         print('login')
+#
+#     def run(self):
+#         while True:
+#             choice=input('>>>: ').strip()
+#             if hasattr(self,choice):
+#                 method=getattr(self,choice)
+#                 method()
+#             else:
+#                 print('命令不存在')
+#
+#
+# obj=Ftp()
+# obj.run()
+#==========================================================================================
+04内置方法
+# __str__：在对象被打印时自动触发，然后将该绑定方法的返回值(必须是字符串类型)当做本次打印的结果
+
+# class People:
+#     def __init__(self,name,age):
+#         self.name=name
+#         self.age=age
+#
+#     def __str__(self):
+#         return '<name:%s age:%s>' %(self.name,self.age)
+#
+# obj1=People('egon',18)
+# obj2=People('lxx',38)
+#
+# print(obj1) #print(obj1.__str__())
+# print(obj2) #print(obj2.__str__())
+
+# l=list([1,2,3])
+# print(l)
+
+
+# __del__：在对象被删除前自动触发, 在该方法内应该执行与该对象有关的系统资源的回收操作
+class Foo:
+    def __init__(self,filename,encoding='utf-8'):
+        self.f=open(filename,'r',encoding=encoding)
+
+    def __del__(self):
+        # print('run.....')
+        #回收对象相关联的其他资源
+        self.f.close()
+
+obj=Foo()
+del obj #obj.__del__()
+print('其他代码1')
+print('其他代码2')
+print('其他代码3')
+print('其他代码4')
+#obj.__del__()
+
+#==========================================================================================
+class A(object):
+    def test(self):
+        print('from A')
+
+class B(A):
+    def test(self):
+        print('from B')
+
+class C(A):
+    def test(self):
+        print('from C')
+
+class D(B):
+    def test(self):
+        print('from D')
+
+class E(C):
+    def test(self):
+        print('from E')
+
+class F(D,E):
+    # def test(self):
+    #     print('from F')
+    pass
+f1=F()
+f1.test()
+print(F.__mro__) #只有新式才有这个属性可以查看线性列表mro，C3算法，经典类没有这个属性
+#以上输出打印
+# from D
+# (<class '__main__.F'>, <class '__main__.D'>, <class '__main__.B'>, <class '__main__.E'>, <class '__main__.C'>, <class '__main__.A'>, <class 'object'>)
+
+
+
+#新式类继承顺序:F->D->B->E->C->A
+#经典类继承顺序:F->D->B->A->E->C
+#python3中统一都是新式类
+#pyhon2中才分新式类与经典类
+
+# 继承顺序
+
+
+
+
+
+
