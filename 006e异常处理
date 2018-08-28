@@ -1,0 +1,367 @@
+'''
+1. 什么是异常处理
+    异常是错误发生的信号,一旦程序出错就会产生一个异常,如果该异常
+    没有被应用程序处理,那么该异常就会抛出来,程序的执行也随之终止
+
+    异常包含三个部分:
+        1. traceback异常的追踪信息
+        2. 异常的类型
+        3. 异常的信息
+
+    错误分为两大类:
+        1. 语法上的错误:在程序运行前就应该立即修正
+        2. 逻辑上的错误:
+         a.可以预知程序发生错误的条件，应用if判断去规避掉错误，提前预防掉，（错误能够预防）
+         b.无法预知程序发生错误的条件，也就是说错误一定发生，应用try....ecxept ，错误未知，补救措施
+
+2. 为何要异常处理
+
+    避免程序因为异常而崩溃,所以在应用程序中应该对异常进行处理,从而增强程序的健壮性
+
+3. 如何异常处理
+try:
+    代码1
+    代码2
+    代码3
+    ......
+except NameError:
+    当抛出的异常是NameError时执行的子代码块
+except ....:
+    pass
+except ...:
+    pass
+else:   #一行一行走到这里，判断后决定是否运行下面的异常
+    pass
+finally:   # 无论以上有无异常，最后都会执行，通常在这里进行回收资源的操作
+    pass
+
+'''
+
+
+# 1. 常见的逻辑错误导致的异常
+# print('adsfsadf'
+
+# age=input('>>: ').strip()
+# print(age > 10) #TypeError
+
+# for i in 10: #TypeError
+#     pass
+
+# import os
+# os.xxx #AttributeError
+
+# 1 / 0 #ZeroDivisionError:
+
+# print('=====1')
+# print('=====2')
+# print('=====3')
+# l=[1,2,3]
+# l[1000] #IndexError
+# print('=====4')
+# d={'x':1,'y':2}
+# d['z'] #KeyError
+# print('=====5')
+
+# 2. 异常处理
+
+# 异常处理的单分支
+# try:
+#     print('=====1')
+#     print('=====2')
+#     print('=====3')
+#     d = {'x': 1, 'y': 2}
+#     d['z']  # KeyError
+#     print('=====4')
+#     l = [1, 2, 3]
+#     l[1000]  # IndexError
+#     print('=====5')
+# except IndexError:
+#     print('IndexError')
+#
+# print('other code')
+
+# 异常处理的多分支
+# try:
+#     print('=====1')
+#     print('=====2')
+#     print('=====3')
+#     d = {'x': 1, 'y': 2}
+#     d['z']  # KeyError
+#     print('=====4')
+#     l = [1, 2, 3]
+#     l[1000]  # IndexError
+#     print('=====5')
+# except KeyError as e:
+#     print('KeyError',e)
+# except IndexError as e:
+#     print('IndexError',e)
+#
+#
+# print('other code')
+
+
+
+
+# try:
+#     print('=====1')
+#     print('=====2')
+#     print('=====3')
+#     d = {'x': 1, 'y': 2}
+#     # d['z']  # KeyError
+#     print('=====4')
+#     l = [1, 2, 3]
+#     l[1000]  # IndexError
+#     print('=====5')
+# except (KeyError,IndexError) as e:
+#     print(e)
+# print('other code')
+
+# 万能异常类型Exception:可以匹配任意类型的异常
+# try:
+#     print('=====1')
+#     print('=====2')
+#     print('=====3')
+#     d = {'x': 1, 'y': 2}
+#     # d['z']  # KeyError
+#     # xxx
+#     print('=====4')
+#     l = [1, 2, 3]
+#     l[1000]  # IndexError
+#     print('=====5')
+# except IndexError as e:
+#     print('IndexError:', e)
+# except KeyError as e:
+#     print('KeyError:', e)
+# except Exception as e:
+#     print('Exception:',e)
+#
+# print('other code')
+
+# try... else...
+# try:
+#     print('=====1')
+#     print('=====2')
+#     print('=====3')
+#     d = {'x': 1, 'y': 2}
+#     # d['z']  # KeyError
+#     # xxx
+#     print('=====4')
+#     l = [1, 2, 3]
+#     # l[1000]  # IndexError
+#     print('=====5')
+# except IndexError as e:
+#     print('IndexError:', e)
+# except KeyError as e:
+#     print('KeyError:', e)
+# except Exception as e:
+#     print('Exception:',e)
+# else:
+#     print('else必须放到后面,else的子代码块会在被检测的代码没有异常的情况下执行')
+# # print('other code')
+
+# try... finally...
+# try:
+#     f=open('a.txt','w')
+#     print('=====1')
+#     print('=====2')
+#     print('=====3')
+#     d = {'x': 1, 'y': 2}
+#     # d['z']  # KeyError
+#     # xxx
+#     'xx' > 10
+#     print('=====4')
+#     l = [1, 2, 3]
+#     # l[1000]  # IndexError
+#     print('=====5')
+#
+# except IndexError as e:
+#     print('IndexError:', e)
+# except KeyError as e:
+#     print('KeyError:', e)
+# # except Exception as e:
+# #     print('Exception:',e)
+# else:
+#     print('else必须放到后面,else的子代码块会在被检测的代码没有异常的情况下执行')
+# finally:
+#     print('无论被检测的代码有没有异常都会执行')
+#     f.close()
+
+
+# 主动触发异常
+# print('===>1')
+# print('===>2')
+# raise TypeError('类型错误')
+# print('===>3')
+
+# class People:
+#     def __init__(self,name,age):
+#         self.__name=name     #隐藏姓名
+#         self.__age=age        3隐藏age
+#
+#     def tell_info(self):
+#         print(self.__name,self.__age)
+#
+#     def set_info(self,name,age):
+#         if not isinstance(name,str):
+#             raise TypeError('名字必须是str类型')
+#         if not isinstance(age,int):
+#             raise TypeError('年龄必须是int类型')
+#         self.__name=name
+#         self.__age=age
+#
+# obj=People('egon',18)
+# # print(obj.__dict__)
+# # obj.tell_info()
+#
+# obj.set_info('egon',123)
+# obj.tell_info()
+#
+
+
+# 自定义异常类型(了解)
+# class MyException(BaseException):
+#     def __init__(self,msg):
+#         super().__init__()
+#         self.msg=msg
+#
+#     def __str__(self):
+#         return '<%s>' %self.msg
+#
+# raise MyException('我自定义的异常')
+
+
+
+# 断言(了解)
+print('上半部分,生产数据')
+l=[1,2,3,4]
+
+# if len(l) != 5:
+#     raise TypeError('列表的长度必须为5')
+assert len(l) == 5
+
+print('下半部分,处理数据')
+#输出AssertionError
+
+
+
+
+
+
+
+
+# =========课上自己练习
+
+# try:
+#     print('123')
+#
+#     l=[1,2,4]
+#     l[1000]
+#     print('12678')
+#
+# except IndexError :
+#     print('index error')
+#
+# print('other code')
+
+# print('1')
+# raise TypeError('类型错误')
+# print('2')
+
+
+# class MyException(BaseException ):
+#     pass
+
+# else：中途判断，会运行异常
+# finally：最后一定运行的异常
+
+# raise与自定义(规范、资源被占用需要清理)异常连用
+
+#自定义异常类型(了解)
+# class MyException(BaseException):
+#     def __init__(self,msg):
+#         super().__init__()
+#         self.msg=msg
+#
+#     def __str__(self):
+#         return '%s'%self.msg
+# raise MyException('我自定义的异常')
+
+
+# 断言（了解）
+# print('上半部分，生产数据')
+# l=[1,2,3,4,]   #应该l=[1,2,3,4,5]
+
+# if len(l)!=5:
+#     raise TypeError('列表的长度必须为5')
+#
+
+# assert len(l)==5:
+# print('下半部分，处理数据')
+
+
+#===========================================================================
+# 自定义处理异常结构
+# 1) try: except Exception as e:
+# 2) try: except Exception: else:
+# 3) try: except Exception: else: finally:
+# 4) try: except...
+# 5) try: finally:
+
+# 主动抛出异常
+# raise Exception(msg)
+
+# 自定义异常
+"""
+class MyException(BaseException):
+    # 构造自定义异常类对象
+    def __init__(self):
+        pass
+    # 格式化异常信息
+    def __str__(self):
+        pass
+"""
+"""
+# try试图判断段模块是否会出现异常
+num = input("请输入一个数字:")
+try:
+    num += 1
+# 如果出现异常将会被except捕获
+# 将异常信息存放到变量e中
+except TypeError as e:
+    print("异常内容:", e)
+# 如果没有出现异常,会执行else分支
+else:
+    pass
+print(num)
+"""
+"""
+try:
+    # 一旦该语句被异常捕获,代表该条语句没有被执行 ==> num未被产生
+    num = int(input("请输入一个数字:"))
+except ValueError:
+    pass
+try:
+    num += 1
+    print(num)
+except NameError:
+    pass
+"""
+
+class OverError(BaseException):
+    def __init__(self, msg):
+        # 1)
+        # pass # super().__init__(msg) ==> __main__.OverError: 越界
+        # 没有向上传输异常信息,原因是想自定义异常信息的输出格式
+        super().__init__() # ==> __main__.OverError
+        self.msg = msg
+
+    def __str__(self):
+        return "<异常信息: %s>" % self.msg
+
+
+# 假设规定用户输入的永远是数字
+num = int(input("请输入一个数字:")) # 该条语句不会出错
+# 但是num在0~10之间才是想要的(合法的)数字
+if not (10 >= num >= 0):
+    raise OverError("越界")
+
