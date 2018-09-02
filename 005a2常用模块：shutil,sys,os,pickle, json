@@ -1,0 +1,215 @@
+001. shutil 模块
+"""
+    shutil 模块
+        用于简化文件操作  (文件的高级操作)
+    常用方法
+    copy
+    move
+    rm
+    make_archive
+
+"""
+import shutil
+import zipfile,tarfile
+# shutil.copyfileobj(open("a.txt","r",encoding="utf-8"),open("b.txt","w",encoding="utf-8"),length=1024)
+
+
+
+# 利用shutil来创建压缩文件  仅支持 tar 和zip格式 内部调用zipFIle tarFIle模块实现
+# shutil.make_archive("test","zip",root_dir="D:\脱产三期视频\Day17\代码")
+
+# 解压zip
+# z = zipfile.ZipFile(r"D:\脱产三期视频\Day17\test.zip")
+# z.extractall()
+# z.close()
+
+# 解压tar
+# t = tarfile.open(r"D:\脱产三期视频\Day17\test.tar")
+# t.extractall()
+# t.close()
+
+
+# t = tarfile.open(r"D:\脱产三期视频\Day17\mytar.tar","w")
+# t.add(r"D:\脱产三期视频\Day17\1_datetime_test（3星）.py")
+# t.close()
+
+
+#=====================/========================================
+002.sys模块
+
+"""
+    sys模块
+        系统相关
+        一般用于设计脚本程序
+    常用方法
+    argv  获取cmd输入的参数
+
+
+"""
+# import sys
+# print(sys.argv)
+#打印['/Users/TienSir/PycharmProjects/python开发/老男孩课程/老男孩讲课内容+作业/day17+导入模块介绍/4_sys_test（3星）.py']
+
+# print(sys.platform)  #操作系统的平台 ，打印darwin
+
+# print(sys.exit(0))
+
+# print("%%10")   #%%10
+# print("%%20")   #%%20
+# print("%%30")   #%%30
+# print("%%40")   #%%40
+
+#=====================/========================================
+003.
+"""
+    OS模块
+        os表示操作系统相关
+
+        第一大快功能 就是围绕文件和目录的操作
+"""
+import os,sys
+# print(os.getcwd())  #打印/Users/TienSir/PycharmProjects/python开发/老男孩课程/老男孩讲课内容+作业/day17+导入模块介绍
+# print(__file__)    #打印/Users/TienSir/PycharmProjects/python开发/老男孩课程/老男孩讲课内容+作业/day17+导入模块介绍/5_OS模块（5星）.py
+#
+# print(os.stat("D:\脱产三期视频\Day17\datetime_test.py"))
+#
+# print(sys.platform)  #打印操作系统平台：darwin
+# print(os.name)   #打印posix
+#
+# print(os.system("dir"))  #dir（目录）：32512
+#
+
+# print(os.environ)   #环境变量，作用于整个程序（文件夹，很多py文件），不仅限于单个py文件
+# 打印（字典形式）environ({'PATH': '/Users/TienSir/PycharmProjects/untitled3/venv/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public', 'PYTHONPATH': '/Users/TienSir/PycharmProjects/python开发', 'SHELL': '/bin/bash', 'PYTHONIOENCODING': 'UTF-8', 'VERSIONER_PYTHON_PREFER_32_BIT': 'no', 'USER': 'TienSir', 'TMPDIR': '/var/folders/dn/j9zj4y8x7zb9jl80vtg_mlvm0000gn/T/', 'PS1': '(venv) ', 'SSH_AUTH_SOCK': '/private/tmp/com.apple.launchd.GfnT8cj3Tf/Listeners', 'VIRTUAL_ENV': '/Users/TienSir/PycharmProjects/untitled3/venv', 'XPC_FLAGS': '0x0', 'PYTHONUNBUFFERED': '1', 'VERSIONER_PYTHON_VERSION': '2.7', '__CF_USER_TEXT_ENCODING': '0x1F5:0x19:0x34', 'Apple_PubSub_Socket_Render': '/private/tmp/com.apple.launchd.Teui1J3L5u/Render', 'LOGNAME': 'TienSir', 'LC_CTYPE': 'zh_CN.UTF-8', 'XPC_SERVICE_NAME': 'com.jetbrains.pycharm.212832', 'PWD': '/Users/TienSir/PycharmProjects/python开发/老男孩课程/老男孩讲课内容+作业/day17+导入模块介绍', 'PYCHARM_HOSTED': '1', 'HOME': '/Users/TienSir', '__PYVENV_LAUNCHER__': '/Users/TienSir/PycharmProjects/untitled3/venv/bin/python'})
+
+
+# print(os.path.abspath(r"bbb.txt"))  #/Users/TienSir/PycharmProjects/python开发/老男孩课程/老男孩讲课内容+作业/day17+导入模块介绍/bbb.txt
+
+# print(os.path.join("C:","users","aaa.txt"))  #C:/users/aaa.txt
+# print(os.path.normcase(r"/a/b/CSD"))  #打印/a/b/CSD
+# print(os.path.normpath(r"a\b\c\d\.."))  #打印a\b\c\d\..
+#
+# # 获取项目主目录
+# print(os.path.dirname(os.path.dirname(__file__)))  #/Users/TienSir/PycharmProjects/python开发/老男孩课程/老男孩讲课内容+作业
+# print(os.path.normpath(os.path.join(os.getcwd(), os.pardir)))   #打印/Users/TienSir/PycharmProjects/python开发/老男孩课程/老男孩讲课内容+作业
+
+#=====================/========================================
+
+04.pickle模块
+"""
+    pickle模块
+        作用于序列化
+        序列化就是将内存中的数据持久化到硬盘  #将内存的数据类型转换成一种中间格式，存在硬盘当中
+    回顾 使用文件读写也能完成把数据持久化存储  但是有局限性 当数据比较复杂时用起来就很麻烦
+    例如 需要把一个字典存储到硬盘中   先转成字符串 写入 读取为字符串 转为原始的格式
+
+    所以就有了pickle
+        1.能将所有python中的数据序列化    int float str dic list tuple set bool
+        2.反序列化  将之前序列化的数据 在恢复成python的数据格式
+
+    pickle产生的数据 只能由python读取  (跨平台性差)
+    今后你开发程序不可能就是单机程序 你需要和其他设备 其他平台 交换数据
+    一三八四三八零零四三八
+
+    我们需要找到一种通用的数据格式 让各个平台都能识别
+    
+
+"""
+users = {"name":"yyh","age":20,"hobbies":["打豆豆","飘"]}
+# f = open("a.txt","wt",encoding="utf-8")
+# f.write(str(users))
+# f.close()
+
+import pickle
+#
+# print(pickle.dumps(users))
+# 序列化
+# f =  open("p.txt","wb")
+# f.write(pickle.dumps(users))
+# f.close()
+
+# # 反序列化
+# f = open("p.txt","rb")
+# print(type(pickle.loads(f.read())))
+# f.close()
+
+# 序列化
+# pickle.dump(users,open("pp.txt","wb"))
+# print(pickle.load(open("pp.txt","rb")))
+
+import random
+
+print("掌声有请:第%s排 第%s位童鞋" % (random.randint(1,10),random.randint(1,8)))
+#掌声有请:第7排 第7位童鞋
+
+#=====================/========================================
+005.json
+
+"""
+      pickle产生的数据 只能由python读取  (跨平台性差)    #python格式转换成bytes，永久保存在硬盘（硬盘保存的是二进制）
+     今后你开发程序不可能就是单机程序 你需要和其他设备 其他平台 交换数据
+     一三八四三八零零四三八
+
+     我们需要找到一种通用的数据格式 让各个平台都能识别
+
+    json模块             #Python格式转换成字符串，永久保存在硬盘
+        用于处理json格式数据的模块
+        json 全称 JavaScrip Object Notation  js的对象表示法
+        所以json能支持的数据类型就是js支持数据类型
+
+    json格式标准
+        能存储的有 str int float dic list bool
+        案列  要求 数据的最开始和最末尾 必须是{} []
+        {"name":"yyh"}
+
+    json是一种通用的数据交换格式  目前主流的语言都能够轻松解析
+    注意: 在使用json格式的时候 数据类型必须按照要求来写 并且 不支持python 元祖 True/Flase '' '''
+
+
+    常用方法
+        序列化
+            dump   处理文件
+            dumps  处理字符串
+        反序列化
+            load  处理文件
+            loads 处理字符串
+
+"""
+#json知识点：http://www.cnblogs.com/linhaifeng/articles/6384466.html#_label5
+
+# 将python格式的数据序列化为json格式  python中的任何类型都能被转化为json格式 表现形式不同
+import json
+users = {'name':"音乐会","age":20,"hobbies":("music","movies")}
+print(json.dumps(users))   #打印{"name": "\u97f3\u4e50\u4f1a", "age": 20, "hobbies": ["music", "movies"]}
+# json.dump(users,open("users.json","wt",encoding="utf-8"))
+#
+
+
+# json的反序列化（有一个返回值）
+jsonstr = json.load(open("users.json","r",encoding="utf-8"))
+print(jsonstr)
+
+
+
+"""
+    time 
+        时间转换                    ****
+    datetime
+        获取时间                    ***
+    os
+        操作系统的文件路和目录 
+        os.path                     *****
+    sys
+        解释器相关  用于设计脚本程序   ***
+    pickle
+        python本地序列化方式 比较局限  ** 
+    json
+        通用的数据交换格式 使用起来挺简单  *****
+    shutil
+        文件相关的高级操作                  ***
+    random
+        随机数相关   简单          ****
+"""
+
+# 在线json解析
+
