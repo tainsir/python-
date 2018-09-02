@@ -1,0 +1,110 @@
+001ATM（略）
+#==================/=================
+
+
+002模拟进度条
+
+"""
+    当程序要进行耗时操作时例如  读写  网络传输
+    需要给用户提示一个进度信息
+    "[*********        ]"
+    "[*********       ]"
+    "[************    ]"
+    "[****************]"
+"""
+# print("[*          ]")
+# print("[**         ]")
+
+print("[%-10s]" % ("*" * 1))    #print:[*         ]
+print("[%-10s]" % ("*" * 2))    #print:[**        ]
+print("[%-10s]" % ("*" * 3))    #print:[***       ]
+print("[%-10s]" % ("*" * 4))    #print:[****      ]
+
+# 比例 0 - 1     0.5
+def progress(percent,width=30):
+    percent = percent if percent <= 1 else 1
+    text = ("\r[%%-%ds]" % width) % ("*" * int((width * percent)))
+    text = text + "%d%%"   #第一个是
+    text = text % (percent * 100)
+    print(  text  , end="")
+
+# progress(0.5)
+
+
+# 模拟下载
+# 文件大小
+import  time
+file_size = 10240
+# 已经下载大小
+cur_size = 0
+while True:
+    time.sleep(0.5)
+    cur_size += 1021
+    progress(cur_size / file_size)
+    if cur_size >= file_size:
+        print()
+        print("finish")
+        break
+
+# print("%-%ds" % (30,"1"))
+#
+#  # %-30s  % *   %-30s
+#  # %%-%ds   % 20
+#
+# # %-20s  % "1212"
+# print("%%")
+
+#
+# print(("%%-%ds" % 20) % "*" )
+#
+#
+#
+
+# 字符串的格式化
+# 需要被占位的情况下,前置%为转义字符
+# 不需要被占位的情况下,所有%都是普通%
+
+# 被转义成普通后的%在新的逻辑中会重新变为转义%(出现在前置位)
+
+
+#=========/other way====
+#-----------/----------------------------
+# way 1
+# import time
+# import random
+# def progress(p):
+#     w = 50
+#     ss = "%d" % w
+#     ss = (("%%-%ss" % ss) % ('#' * int(w * p)))
+#     ss = "[%s] %d%%" % (ss, p * 100)
+#     print("\r" + ss, end="")
+#
+# curr_size = 0
+# total_size = 10241
+# while curr_size < total_size:
+#     time.sleep(0.1)
+#     # 剩余下载量
+#     last_size = total_size - curr_size
+#     # 本次网速下的该有下载量
+#     load_size = random.randint(900, 1024)
+#     if last_size > load_size:
+#         curr_size += load_size
+#     else: # 仅为最后一次下载量
+#         curr_size += last_size
+#     progress(curr_size / total_size)
+
+#way2
+# def foo(a,b=30):
+#     a=a if a<=1 else 1
+#     text=('\r[%%-%ds]'%b)%('*'*int(b*a))
+#     text=text+'%d%%'
+#     text=text%(a*100)
+#     print(text,end='')
+# import time
+# curr_size=0
+# total_size=10240
+# while curr_size<total_size:
+#     time.sleep(0.5)
+#     curr_size+=1024
+#     a=curr_size/total_size
+#     foo(a)
