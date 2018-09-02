@@ -1,0 +1,180 @@
+001.logging模块
+'''
+import logging
+
+# 1. 控制日志级别
+# 2. 控制日志格式
+# 3. 控制输出的目标为文件
+logging.basicConfig(filename='access.log',
+                    format='%(asctime)s - %(name)s - %(levelname)s -%(module)s:  %(message)s',
+                    datefmt='%Y-%m-%d %H:%M:%S %p',
+                    level=10,
+                    )
+
+logging.debug('debug日志') # 10
+logging.info('info日志')   # 20
+logging.warning('warning日志') #30
+logging.error('error日志')#40
+logging.critical('critical日志') #50
+
+# 火警的级别
+
+# 大功率电器
+# 抽烟
+# 烧烤
+# 自焚
+# 炸药包
+
+'''
+# 1. 能够同时往终端与文件中记录日志
+# 2. 能够修改字符串编码
+
+import logging
+
+# 1. logger对象: 负责生产各种级别的日志
+logger1 = logging.getLogger('用户交易')  # 日志名用来标识日志的与什么业务有关
+
+# 2. filter对象: 过滤日志
+
+# 3. handler对象: 控制日志输出目标位置
+fh1 = logging.FileHandler('a1.log',encoding='utf-8')
+fh2 = logging.FileHandler('a2.log',encoding='utf-8')
+ch = logging.StreamHandler()
+
+# 4. formmater对象
+formatter1 = logging.Formatter(
+    fmt='%(asctime)s - %(name)s - %(levelname)s -%(module)s:  %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S %p'
+)
+
+formatter2 = logging.Formatter(
+    fmt='%(asctime)s - %(levelname)s :  %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S %p'
+)
+
+# 5. 绑定logger对象与handler对象
+logger1.addHandler(fh1)
+logger1.addHandler(fh2)
+logger1.addHandler(ch)
+
+# 6. 绑定handler对象与formatter对象
+
+fh1.setFormatter(formatter1)
+fh2.setFormatter(formatter1)
+ch.setFormatter(formatter2)
+
+# 7. 设置日志级别,有logger对象与handler对象两层关卡,必须都放行最终日志才会放行,通常二者级别相同
+logger1.setLevel(10)
+fh1.setLevel(10)
+fh2.setLevel(10)
+ch.setLevel(10)
+
+# 8. 使用logger对象产生日志
+logger1.info('alex给egon转账1个亿')
+
+
+#=======================/===============================================
+002.run.py文件
+
+
+import logging.config
+import settings
+
+logging.config.dictConfig(settings.LOGGING_DIC)
+
+logger1=logging.getLogger('用户交易')
+#logger1-> fh1,fh2,ch
+logger1.info('alex给egon转账1个亿')
+
+logger2=logging.getLogger('用户权限')
+#logger2-> fh1,fh2,ch
+logger2.error('egon没有执行权限')
+
+#=======================/===============================================
+03.settings.py日志配置文件固定格式
+
+"""
+logging配置
+"""
+
+import os
+import logging.config
+
+
+BASE_LOG=os.path.join(BASE_DIR,'log') #
+
+
+
+# 定义三种日志输出格式 开始
+
+standard_format = '[%(asctime)s][%(threadName)s:%(thread)d][task_id:%(name)s][%(filename)s:%(lineno)d]' \
+                  '[%(levelname)s][%(message)s]' #其中name为getlogger指定的名字
+
+simple_format = '[%(levelname)s][%(asctime)s][%(filename)s:%(lineno)d]%(message)s'
+
+id_simple_format = '[%(levelname)s][%(asctime)s] %(message)s'
+
+# 定义日志输出格式 结束
+
+# logfile_dir = os.path.dirname(os.path.abspath(__file__))  # log文件的目录
+#
+# logfile_name = 'all2.log'  # log文件名
+
+# 如果不存在定义的日志目录就创建一个
+if not os.path.isdir(BASE_LOG):
+    os.mkdir(BASE_LOG)
+
+# log文件的全路径
+logfile_path = os.path.join(BASE_LOG, 'log.log')
+
+# log配置字典
+LOGGING_DIC = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': standard_format
+        },
+        'simple': {
+            'format': simple_format
+        },
+    },
+    'filters': {},
+    'handlers': {
+        #打印到终端的日志
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',  # 打印到屏幕
+            'formatter': 'simple'
+        },
+        #打印到文件的日志,收集info及以上的日志
+        'default': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',  # 保存到文件
+            'formatter': 'standard',
+            'filename': logfile_path,  # 日志文件
+            'maxBytes': 1024*1024*5,  # 日志大小 5M
+            'backupCount': 5,
+            'encoding': 'utf-8',  # 日志文件的编码，再也不用担心中文log乱码了
+        },
+    },
+    'loggers': {
+        #logging.getLogger(__name__)拿到的logger配置
+        '': {
+            'handlers': ['default', 'console'],  # 这里把上面定义的两个handler都加上，即log数据既写入文件又打印到屏幕
+            'level': 'DEBUG',
+            'propagate': True,  # 向上（更高level的logger）传递
+        },
+    },
+}
+# 
+# 
+# def load_my_logging_cfg():
+#     logging.config.dictConfig(LOGGING_DIC)  # 导入上面定义的logging配置
+#     logger = logging.getLogger(__name__)  # 生成一个log实例
+#     logger.info('It works!')  # 记录该文件的运行状态
+# 
+# if __name__ == '__main__':
+#     load_my_logging_cfg()
+
+
