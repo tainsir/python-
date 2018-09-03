@@ -120,26 +120,27 @@ import datetime
         uniform(1,3) 闭闭 浮点
         shuffle(列表) 打乱顺序
 """
+
 import random
 # # 0 - 1 随机浮点 不包含1
 # print(random.random())   #0.20758871008104063
-# print(random.randint(1,3))  #前开后开 2
+# print(random.randint(1,3))  #前开后开 2  随机整形
 # print(random.randrange(1,10))   #前开后闭合  9
-# print(random.choice((1,2,3)))    #  1
+# print(random.choice((1,'ee',3,'ab')))    #  随机选择一个字符 如：ab
 # print(random.choices((1,2,3)))    #  [1]
 # print(random.sample([1,2,3],2))    #[3,1],随机无序地选2个数放列表
 
 # a=random.randrange(1,10)
 # b=random.randrange(1,10)
 # print('排%s 列%s'%(a,b))
-#
 
+#
 # l = [1,'rr',3,'et',5]
 # print(random.shuffle(l))
 # print(l)   #打乱列表顺序[3, 5, 'rr', 1, 'et']
-#
-#
-# print(random.uniform(1,1.5)) #闭闭区间的随机浮点1.439971030078879
+# #
+# #
+# print(random.uniform(1,1.5)) #闭闭区间的随机浮点1.459971030078879
 
 
 
@@ -152,7 +153,8 @@ import random
 # #         随机0到9
 #         num = str(random.randint(0,9))   #数字不能直接拼接，必须先转换为字符，
 #         c = chr(random.randint(65,90))
-#         s = random.choice([num,c])
+#         s = random.choice([num,c])    #字母与汉字组成的列表或元组，(num,c)也行
 #         res += s
 #     return res
-# print(make_code(4))   #打印CR2B
+# print(make_code(4))   #打印4位CR2B
+
