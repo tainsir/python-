@@ -1,0 +1,89 @@
+'''
+今日作业：
+	1.书写验证身份证、手机号码、网易邮箱的正则表达式
+
+	2.遍历book.xml文件，通过正则匹配，将所有书名存放到book.txt文件中
+
+	book.xml 文件：
+	<?xml version="1.0" encoding="utf-8" ?>
+<Books>
+	<Book>小学语文</Book>
+	<Book>初中数学</Book>
+	<Book>大学英语</Book>
+</Books>
+
+
+	3.现有一个text目录下有a.txt,b.txt,c.py三个文件，利用subprocess模块，将三个文件的文件名存放到tag.txt文件中
+	思考：执行文件在text目录下与不在text目录下两种情况
+
+'''
+=====================/=================================================
+#2.
+# import re
+# ts='abcXYZ'
+# reg=r'\[A-z]'  #A-Z,65-97 a-z 97-122
+# res=re.findall('reg',ts)
+# print(res)
+
+
+#
+# import re
+# # 验证密码是否符合规则  不能少于8位  只能是数字字母下划线汉字 不包含- 最长16位
+# pwd = "12345678"
+#
+# # print(re.findall("\w{8,16}",pwd))   #['12345678']   #包含汉字
+#
+# # 验证手机号码 长度11 全是数字  前三位是固定范围[189 131 150]
+# phone = "18962996185"
+# # print(re.findall("1(?:89|31|50)\d{8}",phone))   #['18962996185']
+
+# phone=''
+# print(re.findall('1(?:89|31|50)\d{8}',phone))
+
+
+#邮箱
+import re
+# reg=r'[a-zA-Z][0-9a-zA-Z_-](,7)@(?:126|168)\.com'
+# ss='a@163.com'
+# print(re.findall(reg,ss))
+
+# ts='abcdef'
+# reg=r'abcdef'
+# regex=re.compile(reg)
+# res=regex.match(ts)
+# # print(reg)
+# # print(res.span())  #(0, 6)
+# # print(res.group(0))  #abcdef
+# print(reg.group(1))
+
+
+
+#2
+import xml
+# wf=open('book.xml','w',encoding='utf-8')
+# with open('book.xml','r', encoding='utf-8') as rf:
+    # for line in rf:
+    #     # print(line,end='')
+    #     res=re.findall(r'<Book>(\w+)</Book>',line)
+    #     if res:
+    #         wf.write(res[0]+'\n')
+    #         res=re.search(r'<Book>(\w+)</Book>',line)
+    #         if res:
+    #             wf.write(res)
+
+
+# fn 返回值：字符串，参数：匹配match的对象
+# import re
+# def fn(match):
+#     res=match.group()
+#     # print(res)
+#     return str(int(res)+1)
+# res=re.sub('',fn,'我的月薪：8888，你的月薪：1')
+# print(res)
+
+
+import subprocess
+obj=subprocess.Popen('dir',shell=True,stdout=subprocess.PIPE)
+print(obj.stdout.read().decode('gbk'))
+with open('tag.txt','w',encoding='utf-8') as f:
+    f.write(obj.stdout.read().decode('gbk'))
