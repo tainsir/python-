@@ -139,6 +139,7 @@ print(re.findall("src='(?:www).(?:baidupic)",src))
           #
           # pattern = re.compile("hello")
           # print(pattern.search("world hello python",3))  #<_sre.SRE_Match object; span=(6, 11), match='hello'>
+          #<_sre.SRE_Match object; span=(6, 11), match='hello'>中，跨度从0开始，6-11找到hello字符
 
           # print(re.sub("hello","gun","world hello Java"))  #world gun Java
 
