@@ -133,12 +133,13 @@ import random
 # b=random.randrange(1,10)
 # print('排%s 列%s'%(a,b))
 #
-# l = [1,2,3,4,5]
+
+# l = [1,'rr',3,'et',5]
 # print(random.shuffle(l))
-# print(l)   #打乱列表顺序
+# print(l)   #打乱列表顺序[3, 5, 'rr', 1, 'et']
 #
 #
-# print(random.uniform(1,2)) #闭闭区间的浮点1.8644840642092588
+# print(random.uniform(1,1.5)) #闭闭区间的随机浮点1.439971030078879
 
 
 
