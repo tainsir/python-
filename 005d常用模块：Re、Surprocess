@@ -227,11 +227,6 @@ print(res2.stdout.read().decode("gbk"))
 
 
 
-
-
-
-
-
 # res2 = subprocess.Popen("echo >a.txt", stdout=subprocess.PIPE, shell=True, stderr=subprocess.PIPE,stdin=res1.stdout)
 # print(res2.stdout.read().decode("gbk"))
 #
@@ -239,6 +234,33 @@ print(res2.stdout.read().decode("gbk"))
 # res=subprocess.Popen('findstr test*',shell=True,stdin=res1.stdout,stdout=subprocess.PIPE)
 # print(res.stdout.read().decode('gbk'))
 
+
+==========================/==============================================================
+需要掌握
+1.re
+    正则表达式是什么*****
+    各种符号
+    常用的       *****
+        \w \s \d .  ^  $
+    范围匹配    *****
+        []   a|b
+    重复匹配    *****
+        {}, +  *   ?
+    分组       *****
+        ()
+    常用的方法
+        findall    *****
+        search     *****
+        match         ***
+        sub           ***
+        split         ***
+
+2.subprocess ***
+    run       返回执行结果对象  ***
+    call      返回执行状态码   ***
+    Popen     返回的也是对象  out  in  err  ***
+
+    进程间的数据访问 **
 
 
 
