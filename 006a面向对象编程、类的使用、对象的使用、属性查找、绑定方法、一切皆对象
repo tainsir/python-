@@ -389,6 +389,7 @@ OldboyStudent.school='OLDBOY'
 
 #=========================/==================================================
 005绑定方法
+
 #类中定义的变量是类的数据属性,类可以用,对象也可以用,大家都指向同一个内存地址,类变量值一旦改变所有对象都跟着变
 
 #类中定义的函数是类的函数属性,类可以用,类来调用就是一个普通的函数,但其实类中定义的函数是给对象用的,而且是绑定给对象用的
@@ -405,25 +406,31 @@ class OldboyStudent:
         print('%s choosing course' %self.name)
 
 
+
 stu1=OldboyStudent('李铁蛋',18,'male')
 stu2=OldboyStudent('赵钢弹',38,'female')
 stu3=OldboyStudent('刘银弹',28,'male')
 
 # 1. 类的函数: 该传几个参数就传几个
-# print(OldboyStudent.__init__)
-# print(OldboyStudent.choose_course)
+# print(OldboyStudent.__init__)   #<function OldboyStudent.__init__ at 0x101445488>
+# print(OldboyStudent.choose_course)   #<function OldboyStudent.choose_course at 0x1014459d8>
 # OldboyStudent.choose_course(stu1)
 
 # 2. 绑定方法,指向类的函数: 特殊之处是绑定给谁就应该由谁来调用,谁来调用就会将谁当做第一个参数自动传入
 # print(stu1.choose_course)
 # print(stu2.choose_course)
 # print(stu3.choose_course)
+# #以上三个绑定方法在不同地址，打印如下：
+# # <bound method OldboyStudent.choose_course of <__main__.OldboyStudent object at 0x101c21b38>>
+# # <bound method OldboyStudent.choose_course of <__main__.OldboyStudent object at 0x101c21b70>>
+# # <bound method OldboyStudent.choose_course of <__main__.OldboyStudent object at 0x101c21ba8>>
 
-# stu1.choose_course(123) #OldboyStudent.choose_course(stu1,123)
-# stu2.choose_course(123)
-# stu3.choose_course(123)
+# stu1.choose_course(123) #OldboyStudent.choose_course(stu1,123)，输出为李铁蛋 choosing course
+# stu2.choose_course(123) #输出为  赵钢弹 choosing course
+# stu3.choose_course(123) #输出为  刘银弹 choosing course
 
-stu1.choose_course()
+
+# stu1.choose_course()  #报错，choose_course() 中缺少'x'
 
 #=========================/==================================================
 
@@ -434,24 +441,26 @@ stu1.choose_course()
 class Foo:
     pass
 
-# print(Foo)
+# print(Foo)  #输出<class '__main__.Foo'>
 # obj=Foo()
-# print(type(obj))
+# print(type(obj))    #输出<class '__main__.Foo'>
 
-# print(int)
+# print(int)   #输出<class 'int'>
 # age=10 #age=int(10)
-# print(type(age))
+# print(type(age))   ##输出<class 'int'>
 
-# print(dict)
+# print(dict)  #直接输出，<class 'dict'>
 
 
-l1=[1,2,3] #l1=list([1,2,3])
-# print(type(l1))
+
+# l1=[1,2,3] #l1=list([1,2,3])
+# print(type(l1))  #直接输出<class 'list'>
 # l1.append(4)
-# print(l1)
+# print(l1)   #[1, 2, 3, 4]
+#
+# l1.append(4) # list.append(l1,4)
+# print(l1)   #[1, 2, 3, 4]
 
-l1.append(4) # list.append(l1,4)
-print(l1)
-
-l2=['a','b','c'] #l2=list(['a','b','c'])
-l2.append('d')
+# l2=['a','b','c'] #l2=list(['a','b','c'])
+# l2.append('d')
+# print(l2)   #['a', 'b', 'c', 'd']
