@@ -1,22 +1,24 @@
 001继承介绍
 '''
 1、什么是继承
-    继承是一种新建类的方式，新建的类称之为子类，被继承的类称之为基类、父类、超类
+    继承是一种新建类的方式，新建的类称之为子类、派生类，被继承的类称之为基类、父类、超类
     继承描述的是一种“遗传”的关系:子类可以重用父类的属性
 
     在python中的继承注意两点：
         1. 在python中支持一个子类同时继承多个父类，
         2. python中类分为两种：
             新式类：但凡继承object的类，以及该类的子类。。。都是新式类
-                在python3中一个类如果没有继承人类类，默认继承object类，即python3中所有的类都是新式类
+                在python3中一个类如果没有显式地继承任何类，默认继承object类，即python3中所有的类都是新式类
 
-            经典类: 没有继承object的类，以及该类的子类。。。都是经典类
-                在python2中才区分新式类与经典类
+            经典类: 没有继承object的类，以及该类的子类子子类。。。都是经典类
+                只有在python2中才区分新式类与经典类，没有显式继承任何类，不会自动继承object类
 
 
 
 2、为何要用继承
     1. 减少代码冗余
+    2. 在python中支持一个子类同时继承多个父类，
+    3. 在继承的背景下类分为新式类、经典类。
 
 
 3、如何用继承
@@ -26,7 +28,7 @@
 class Parent1(object):
     pass
 
-# print(Parent1.__bases__)
+print(Parent1.__bases__)   #输出为(<class 'object'>,)
 
 class Parent2:
     pass
@@ -34,17 +36,16 @@ class Parent2:
 class Subclass1(Parent1,Parent2):
     pass
 
-print(Subclass1.__bases__)
+print(Subclass1.__bases__)  #输出为(<class '__main__.Parent1'>, <class '__main__.Parent2'>)
 
 
 # 1、如何利用继承减少代码冗余？？？
-
 # 2、在继承的背景下，属性查找的优先级
 # 3、新式类与经典的区别
 
 
-
-002
+# =======================/===============================================================
+002利用继承减少代码冗余
 # 继承解决的是类与类之间的代码冗余问题，一定是一个类是另外一个类的子类
 
 
@@ -130,8 +131,6 @@ print(tea1.__dict__)
 
 
 
-
-
 # 问题？？？：如何在子类派生出的新方法中重用父类的功能
 
 class OldboyPeople:
@@ -168,14 +167,15 @@ class OldboyTeacher(OldboyPeople):
         stu.score=num
 
 
-stu1=OldboyStudent('李特丹',18,'female') #OldboyPeople.__init__(stu1,'李特丹',18,'female')
-print(stu1.__dict__)
+stu1=OldboyStudent('李特丹',18,'female') #相当于OldboyPeople.__init__(stu1,'李特丹',18,'female')
+print(stu1.__dict__)  #输出为{'name': '李特丹', 'age': 18, 'sex': 'female', 'score': 0}
 
-tea1=OldboyTeacher('egon',18,'male') ##OldboyPeople.__init__(tea1,'egon',18,'male',10)
-print(tea1.__dict__)
+tea1=OldboyTeacher('egon',18,'male') #相当于OldboyPeople.__init__(tea1,'egon',18,'male',10)
+print(tea1.__dict__)  #输出为{'name': 'egon', 'age': 18, 'sex': 'male'}
 
 
-003
+# =======================/===============================================================
+003子类派生出的新方法中重用父类的功能方式一
 # 在子类派生出的新方法中重用父类功能的方式一：
 # 指名道姓地访问某一个类的函数
 # 注意：
@@ -215,17 +215,18 @@ class OldboyTeacher(OldboyPeople):
         stu.score=num
 
 
-stu1=OldboyStudent('李特丹',18,'female') #OldboyStudent.__init__(stu1,'李特丹',18,'female')
-print(stu1.__dict__)
+stu1=OldboyStudent('李特丹',18,'female') #相当于OldboyStudent.__init__(stu1,'李特丹',18,'female')
+print(stu1.__dict__)  #输出为{'name': '李特丹', 'age': 18, 'sex': 'female', 'score': 0}
 
-tea1=OldboyTeacher('egon',18,'male',10) ##OldboyTeacher.__init__(tea1,'egon',18,'male',10)
-print(tea1.__dict__)
+tea1=OldboyTeacher('egon',18,'male',10) #相当于OldboyTeacher.__init__(tea1,'egon',18,'male',10)
+print(tea1.__dict__)  #输出为{'name': 'egon', 'age': 18, 'sex': 'male', 'level': 10}
 
 
-004
-
+# =======================/===============================================================
+004在单继承背景下的属性查找
 
 # 单继承背景下属性查找的顺序：对象-》对象的类-》父类-》。。。
+#先从obj.xxx中查找，然后再bar中查找，再从FOO查找，最后找object中找
 # class Foo:
 #     # x=333
 #     pass
@@ -255,16 +256,17 @@ class Bar(Foo):
 obj=Bar()
 obj.f2()
 '''
+打印输出为
 Foo.f2
 Bar.f1
 '''
 
 
-
-005
+# =======================/===============================================================
+005 在多继承背景下的属性查找
 #coding:utf-8
 
-# 多继承背景下属性查找的顺序：对象-》对象的类-》按照从左往右的顺序一个一个的分支找下去
+# 多继承背景下属性查找的顺序：(在没有出现菱形继承的情况下)，对象-》对象的类-》按照从左往右的顺序一个一个的分支找下去
 #
 # #第四层
 # class I:
@@ -306,10 +308,10 @@ Bar.f1
 # # obj.x=111
 # print(obj.x)
 
-
+#菱形继承:一个子类继承的多个分支最终汇聚到一个非object类
 # 一旦出现菱形继承问题，新式类与经典类在属性查找上的区别是
-# 新式类：广度优先查找，在最后一个分支查找顶级类
-# 经典类：深度优先查找，在第一个分支就查找顶级类
+# 新式类：广度优先查找，从左往右的顺序，一个分支一个分支的找下去，在最后一个分支查找顶级类
+# 经典类：深度优先查找，从左往右的顺序，一个分支一个分支的找下去，在第一个分支就查找顶级类
 
 class G(object):
     # def test(self):
@@ -352,34 +354,43 @@ class A(B,C,D):
 obj=A()
 # obj.test()
 
-# 新式类：对象-》A-》B-》E-》C-》F-》D-G
+# 新式类：对象-》A-》B-》E-》C-》F-》D-G（python3）
 # 经典类：对象-》A-》B-》E-》G-》C-》F-》D
 
 
-#在新式类中，提供了一个mro方法
-# print(A.mro())
+#在新式类中，提供了一个mro方法,C3算法
+print(A.mro())
+#输出为[<class '__main__.A'>, <class '__main__.B'>, <class '__main__.E'>, <class '__main__.C'>,
+# <class '__main__.F'>, <class '__main__.D'>, <class '__main__.G'>, <class 'object'>]
 
 
-
-
-006
+# =======================/===============================================================
+006 子类派生出的新方法中重用父类的功能方式二
 # 在子类派生出的新方法中重用父类功能的方式二：只能在子类中用
 # 在python2：super(自己的类名,对象自己)
 # 在python3：super()
 # 调用super()会得到一个特殊的对象，该特殊的对象是专门用来引用父类中的属性的，!!!完全参照mro列表!!!
 
+#例子
+# class A:
+#     def eat(self):   #eat为方法
+#         pass
+# class B:
+#     def see(self):
+#         super().  #super可以调用父类的方法
+
 
 
 
 # 注意：
-# 1. 该方式与继承严格依赖于继承的mro列表
+# 1. 该方式与继承严格依赖于继承的mro列表（C3算法）
 # 2. 访问是绑定方法，有自动传值的效果
 
 class OldboyPeople:
     school='Oldboy'
 
-    def __init__(self, name, age, sex):
-        self.name = name
+    def __init__(self, name, age, sex):  #方法
+        self.name = name                 #属性
         self.age = age
         self.sex = sex
 
@@ -409,11 +420,11 @@ class OldboyTeacher(OldboyPeople):
         stu.score=num
 
 
-# stu1=OldboyStudent('李特丹',18,'female') #OldboyStudent.__init__(stu1,'李特丹',18,'female')
-# print(stu1.__dict__)
-#
-# tea1=OldboyTeacher('egon',18,'male',10) ##OldboyTeacher.__init__(tea1,'egon',18,'male',10)
-# print(tea1.__dict__)
+# stu1=OldboyStudent('李特丹',18,'female') #相当于OldboyStudent.__init__(stu1,'李特丹',18,'female')
+# print(stu1.__dict__)  #输出为{'name': '李特丹', 'age': 18, 'sex': 'female', 'score': 0}
+
+# tea1=OldboyTeacher('egon',18,'male',10) #相当于OldboyTeacher.__init__(tea1,'egon',18,'male',10)
+# print(tea1.__dict__)  #输出为{'name': 'egon', 'age': 18, 'sex': 'male', 'level': 10}
 
 
 #例子
@@ -430,10 +441,19 @@ class C(A,B):
     pass
 
 obj=C()
-print(C.mro())
-#[<class '__main__.C'>, <class '__main__.A'>, <class '__main__.B'>, <class 'object'>]
+print(C.mro())  #从C==>A==>B==>object
+#打印输出为[<class '__main__.C'>, <class '__main__.A'>, <class '__main__.B'>, <class 'object'>]
 obj.test()
 '''
+打印输出为
 A.test()
 from B
 '''
+
+# 在子类派生的新方法调用某一个类的函数
+# 方式一：指名道姓地调用莫一个类
+# 特点：
+# 1.与继承无关
+# 2.没有自动传值的效果
+
+
