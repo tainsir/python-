@@ -28,8 +28,7 @@
 
     在程序中: 先定义类,后调用类来产生对象
 
-#=========================/==================================================
-站在老男孩选课系统的角度
+例如：站在老男孩选课系统的角度
 总结出现实世界中的老男孩学生对象:
     学生对象1
         特征
@@ -81,7 +80,7 @@
 '''
 
 
-
+#=========================/==================================================
 002类的使用
 '''
 站在老男孩选课系统的角度
@@ -121,6 +120,7 @@
     相同的技能
         选课
 '''
+
 #在程序中
 #1. 先定义类
 class OldboyStudent:
@@ -135,19 +135,33 @@ class OldboyStudent:
 #类是一系列对象相同的特征(变量)与技能(函数)的结合体,即类体中最常见的就是变量与函数的定义
 # 但其实类体中是可以存在任意python代码的
 # 类体代码会在类定义阶段立即执行,会产生一个类名称空间,用来将类体代码执行过程中产生的名字都丢进去,查看方式如下
-# print(OldboyStudent.__dict__) # 查看类的名称空间
-# print(OldboyStudent.school) #print(OldboyStudent.__dict__['school'])
-# print(OldboyStudent.choose_course)
-# OldboyStudent.school='OLDBOY' #OldboyStudent.__dict__['school']='OLDBOY'
-# OldboyStudent.country='China' #OldboyStudent.__dict__['country']='China'
-# del OldboyStudent.country # del OldboyStudent.__dict__['country']
-# print(OldboyStudent.__dict__)
 
-OldboyStudent.choose_course(123123)
+# print(OldboyStudent.__dict__) # 查看类的名称空间
+#输出为{'k1':'v1,'k2':'v2'...}类型的字典
+# {'__module__': '__main__', 'school': 'oldboy',
+# 'choose_course': <function OldboyStudent.choose_course at 0x102445598>,
+# '__dict__': <attribute '__dict__' of 'OldboyStudent' objects>,
+# '__weakref__': <attribute '__weakref__' of 'OldboyStudent' objects>, '__doc__': None}
+
+# print(OldboyStudent.school)
+#输出为oldboy,    相当于print(OldboyStudent.__dict__['school'])
+
+# print(OldboyStudent.choose_course)
+# 输出为<function OldboyStudent.choose_course at 0x101c45598>
+
+# OldboyStudent.school='OLDBOY'    #更改OldboyStudent.__dict__['school']='OLDBOY'
+# OldboyStudent.country='China'    #添加OldboyStudent.__dict__['country']='China'
+# del OldboyStudent.country      #删除del OldboyStudent.__dict__['country']
+# print(OldboyStudent.__dict__)    #字典中更改、添加、删除
+
+# OldboyStudent.choose_course(123123)   #打印输出为 choosing course
+
+
 # 总结:
 #1. 类本质就是一个名称空间,或者说是一个用来存放变量与函数的容器
 #2. 类的用途之一就是当做名称空间从其内部取出名字来使用
 #3. 类的用途之二是调用类来产生对象
+
 
 
 #2. 后调用类来产生对象
@@ -303,7 +317,9 @@ stu3=OldboyStudent('刘银弹',28,'male') #__init__(stu3,'刘银弹',28,'male')
 
 
 #=========================/==================================================
-004属性查找
+04.属性查找
+
+
 xxx=33333
 class OldboyStudent:
     school = 'oldboy'
@@ -314,7 +330,6 @@ class OldboyStudent:
     def __init__(obj, name, age, sex):
         # print(OldboyStudent.yyy)
         # print(obj.yyy)
-
         OldboyStudent.count+=1
         obj.name = name #stu1.name='李铁蛋'
         obj.age = age   #stu1.age=18
@@ -324,11 +339,11 @@ class OldboyStudent:
         print('choosing course')
 
 # 1. 属性查找顺序
-# stu1=OldboyStudent('李铁蛋',18,'male')
-# print(stu1.__dict__)
-# print(OldboyStudent.__dict__)
-# stu1.xxx=111
-# print(stu1.__dict__)
+stu1=OldboyStudent('李铁蛋',18,'male')
+# print(stu1.__dict__)  #{'name': '李铁蛋', 'age': 18, 'sex': 'male'}
+# print(OldboyStudent.__dict__)  #类的一个大字典
+stu1.xxx=111
+# print(stu1.__dict__)   #{'name': '李铁蛋', 'age': 18, 'sex': 'male', 'xxx': 111}
 # 先从对象自己的名称空间找,没有则去所属的类中找
 # print(stu1.xxx)
 
@@ -336,33 +351,40 @@ class OldboyStudent:
 stu1=OldboyStudent('李铁蛋',18,'male')
 stu2=OldboyStudent('赵钢弹',38,'female')
 stu3=OldboyStudent('刘银弹',28,'male')
-# print(stu1.count)
-# print(stu2.count)
-# print(stu3.count)
-# print(OldboyStudent.count)
+# print(stu1.count)   #对象的数量输出为4
+# print(stu2.count)   #对象的数量输出为4
+# print(stu3.count) #对象的数量输出为4
+# print(OldboyStudent.count)  #对象的数量输出为4
 
 # 类中定义的变量是所有对象共享的,对象可以来用,类也可以来使用,类一旦改变自己的数据属性的值,所有的对象都能感知到
-# print(id(stu1.school))
-# print(id(stu2.school))
-# print(id(stu3.school))
-# print(id(OldboyStudent.school))
+# print(id(stu1.school))   #4314915256
+# print(id(stu2.school))   #4314915256
+# print(id(stu3.school))  #4314915256
+# print(id(OldboyStudent.school))   #4314915256
 
-# stu1.school=123
-# # OldboyStudent.school='OLDBOY'
-# print(stu1.__dict__)
-# print(stu2.__dict__)
-# print(stu3.__dict__)
-# print(OldboyStudent.__dict__)
+stu1.school=123
+OldboyStudent.school='OLDBOY'
+# print(stu1.__dict__)   #{'name': '李铁蛋', 'age': 18, 'sex': 'male', 'school': 123}
+# print(stu2.__dict__)   #{'name': '赵钢弹', 'age': 38, 'sex': 'female'}
+# print(stu3.__dict__)   #{'name': '刘银弹', 'age': 28, 'sex': 'male'}
+# print(OldboyStudent.__dict__)   #类的大字典{'k1':'v1','k2':'v2'...}
 #
-# print(OldboyStudent.school)
-# print(stu1.school)
-# print(stu2.school)
-# print(stu3.school)
+# print(OldboyStudent.school)  #OLDBOY
+# print(stu1.school)      #123
+# print(stu2.school)      #OLDBOY
+# print(stu3.school)  #OLDBOY
 
 
-# print(id(stu1.choose_course))
-# print(id(stu2.choose_course))
-# print(id(stu3.choose_course))
+
+# print(id(stu1.choose_course))   #4302514632
+# print(id(stu2.choose_course))   #4302514632
+# print(id(stu3.choose_course))   #4302514632
+
+
+
+# 类有两种属性：数据属性和函数属性
+# 1. 类的数据属性是所有对象共享的,id都一样
+# 2. 类的函数属性是绑定给对象用的，obj.method称为绑定方法,内存地址都不一样
 
 
 #=========================/==================================================
