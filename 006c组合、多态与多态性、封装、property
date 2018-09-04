@@ -1,4 +1,5 @@
 001：组合
+
 '''
 1. 什么是组合
     组合指的是某一个对象拥有一个属性,该属性的值是另外一个类的对象
@@ -158,6 +159,18 @@ tea1.courses.append(python)
 # print(tea1.courses)
 tea1.tell_all_course()
 
+
+
+#打印结果如下图
+# ==================学生[刘二蛋]选修的课程如下==================
+# <课程名:python全栈开发 价钱:1900 周期:5mons>
+# <课程名:linux架构师 价钱:900 周期:3mons>
+# ============================================================
+# *****************老师[egon]教授的课程如下******************
+# <课程名:python全栈开发 价钱:1900 周期:5mons>
+# **********************************************************************
+#==============================/=====================================================================
+
 002多态与多态性
 '''
 1. 什么是多态
@@ -215,13 +228,17 @@ t1=(1,2)
 # kuangdu(t1)
 
 
-print(len(s1)) #s1.__len__()
-print(len(l1)) #l1.__len__()
-print(len(t1)) #t1.__len__()
+print(len(s1)) #s1.__len__()    #5
+print(len(l1)) #l1.__len__()    #3
+print(len(t1)) #t1.__len__()    #2
 '''
+# #abstract based class,ABC)是用来指定规范,但凡继承该类的子都必须实现speak和run,而名字必须叫speak和run
+# #注意:不能实例化抽象基类  (父类不能实例化调用，属于抽象；子类可以调用父类，可以调用父类/基类，父类由于对象不清晰，父类的实现体无法确定，派用子类去实现)
+# # 前加__的名字，如__name, 不能被'from abc import *' 导入,对外不可见，但外界需要访问
+# # 双__的名字，如__main__, 系统私有化
+# import abc #导入abstract based class
 import abc
-
-class Animal(metaclass=abc.ABCMeta):
+class Animal(metaclass=abc.ABCMeta): #类后面加（metaclass=abc.ABCMeta）
     @abc.abstractmethod
     def speak(self):
         pass
@@ -259,39 +276,46 @@ obj3=Pig()
 
 
 # python崇尚鸭子类型
-class Disk:
-    def read(self):
-        print('Disk read')
+# 几个子类(多态类型，没有父类，叫几个'鸭子')没有直接关系，但都有共同的属性
+# class Disk:
+#     def read(self):
+#         print('Disk read')
+#
+#     def write(self):
+#         print('Disk write')
+#
+#
+# class Memory:
+#     def read(self):
+#         print('Mem read')
+#
+#     def write(self):
+#         print('Mem write')
+#
+#
+# class Cpu:
+#     def read(self):
+#         print('Cpu read')
+#
+#     def write(self):
+#         print('Cpu write')
+#
+#
+# obj1=Disk()
+# obj2=Memory()
+# obj3=Cpu()
+#
+# obj1.read()
+# obj2.read()
+# obj3.read()
 
-    def write(self):
-        print('Disk write')
+#以上输出结果为
+# Disk read
+# Mem read
+# Cpu read
 
 
-class Memory:
-    def read(self):
-        print('Mem read')
-
-    def write(self):
-        print('Mem write')
-
-
-class Cpu:
-    def read(self):
-        print('Cpu read')
-
-    def write(self):
-        print('Cpu write')
-
-
-obj1=Disk()
-obj2=Memory()
-obj3=Cpu()
-
-obj1.read()
-obj2.read()
-obj3.read()
-
-
+#==============================/=====================================================================
 
 003.封装
 '''
@@ -324,31 +348,30 @@ class Foo:
     def get_info(self):
         print(self.__name,self.__age,self.__x) #print(self._Foo__name,self._Foo__age,self._Foo__x)
 
-# print(Foo.__x)
-# print(Foo.__func)
-# print(Foo.__dict__)
-# print(Foo._Foo__x)
-# print(Foo._Foo__y)
+# print(Foo.__x)  #报错，Foo没有__x属性
+# print(Foo.__func)  #报错，Foo没有__func属性
+# print(Foo.__dict__) #大字典
+# print(Foo._Foo__x) #打印111
+# print(Foo._Foo__y)  #打印222
 # Foo.__z=333
 # print(Foo.__dict__)
-# print(Foo.__z)
+# print(Foo.__z) #打印333
 
 
 obj=Foo('egon',18)
-# print(obj.__dict__)
-# print(obj.__name)
-# print(obj.__age)
-# obj.get_info()
+# print(obj.__dict__)  #打印{'_Foo__name': 'egon', '_Foo__age': 18}
+# print(obj.__name)  #报错，没有__name对象
+# print(obj.__age)   #报错 Foo对象没有__age属性
+# obj.get_info()    #打印 egon 18 111
 
 obj.__sex='male'
-# print(obj.__dict__)
-# print(obj.__sex)
+# print(obj.__dict__)   #打印 {'_Foo__name': 'egon', '_Foo__age': 18, '__sex': 'male'}
+# print(obj.__sex)   #打印  male
 
 
 # obj.get_info()
 # 1. __开头的属性到底如何实现的隐藏?
 # 2. 如何实现的对外隐藏,对内不隐藏
-
 
 
 class Foo:
@@ -363,11 +386,10 @@ class Bar(Foo):
     def __f1(self): # _Bar__f1
         print('Bar.f1')
 
-
 obj=Bar()
 
-# obj.f2()
-'''
+obj.f2()
+'''打印如下
 Foo.f2
 Bar.f1
 '''
@@ -376,67 +398,134 @@ Bar.f1
 # 从而严格控制使用对属性的操作
 
 
-class People:
-    def __init__(self,name,age):
-        self.__name=name
-        self.__age=age
-
-    def tell_info(self):
-        print('<name:%s age:%s>'  %(self.__name,self.__age))
-
-    def set_info(self,name,age):
-        if type(name) is not str:
-            print('名字必须是str类型傻叉')
-            return
-        if type(age) is not int:
-            print('年龄必须是int类型傻叉')
-            return
-        self.__name=name
-        self.__age=age
-
-
-obj=People('egon',18)
-# obj.tell_info()
+# class People:
+#     def __init__(self,name,age):
+#         self.__name=name
+#         self.__age=age
+#
+#     def tell_info(self):
+#         print('<name:%s age:%s>'  %(self.__name,self.__age))
+#
+#     def set_info(self,name,age):
+#         if type(name) is not str:
+#             print('名字必须是str类型傻叉')
+#             return
+#         if type(age) is not int:
+#             print('年龄必须是int类型傻叉')
+#             return
+#         self.__name=name
+#         self.__age=age
+#
+#
+# obj=People('egon',18)
+# obj.tell_info()  #打印<name:egon age:18>
 
 # obj.set_info('EGON',19)
+
+
 # obj.set_info(123,19)
-obj.set_info('EGON','18')
-obj.tell_info()
+#打印为
+# <name:egon age:18>
+# 名字必须是str类型傻叉
+# =============/=================
+# obj.set_info('EGON','18')  #同上，傻叉
+# obj.tell_info()
+# # 打印为
+# # 年龄必须是int类型傻叉
+# # <name:egon age:18>
 
-
+# ============================/===============================================
 
 # 封装函数属性:隔离复杂度
-class ATM:
-    def __card(self):
-        print('插卡')
-    def __auth(self):
-        print('用户认证')
-    def __input(self):
-        print('输入取款金额')
-    def __print_bill(self):
-        print('打印账单')
-    def __take_money(self):
-        print('取款')
+#取款是功能,而这个功能有很多功能组成:插卡、密码认证、输入金额、打印账单、取钱
+#对使用者来说,只需要知道取款这个功能即可,其余功能我们都可以隐藏起来,很明显这么做
+#隔离了复杂度,同时也提升了安全性
+# class ATM:
+#     def __card(self):
+#         print('插卡')
+#     def __auth(self):
+#         print('用户认证')
+#     def __input(self):
+#         print('输入取款金额')
+#     def __print_bill(self):
+#         print('打印账单')
+#     def __take_money(self):
+#         print('取款')
+#
+#     def withdraw(self):
+#         self.__card()
+#         self.__auth()
+#         self.__input()
+#         self.__print_bill()
+#         self.__take_money()
+#
+# a=ATM()
+# a.withdraw()
 
-    def withdraw(self):
-        self.__card()
-        self.__auth()
-        self.__input()
-        self.__print_bill()
-        self.__take_money()
-
-a=ATM()
-a.withdraw()
 
 
+#输出结果如下:
+# 插卡
+# 用户认证
+# 输入取款金额
+# 打印账单
+# 取款
 
+
+# ============================/===============================================
+# http://www.cnblogs.com/linhaifeng/articles/7340801.html  #博客园
+# ============================/===============================================
+# 1：封装数据：将数据隐藏起来这不是目的。隐藏起来然后对外提供操作该数据的接口，
+# 然后我们可以在接口附加上对该数据操作的限制，以此完成对数据属性操作的严格控制。
+#
+# class Teacher:
+#     def __init__(self, name, age):
+#         self.__name=name
+#         self.__age=age
+#
+#     def tell_info(self):
+#         print('姓名：%s,年龄：%s'%(self.__name, self.__age ))
+#
+#     def set_info(self,name,age):
+#         if not isinstance(name,str):
+#             raise TypeError
+#         if not isinstance(age, int):
+#             raise TypeError
+#
+#         self.__name =name
+#         self.__age =age
+#
+# t=Teacher('egon',18)
+# t.tell_info()
+#
+# t.set_info('egon',19)
+# t.tell_info()
+#
+# #打印输出
+# # 姓名：egon,年龄：18
+# # 姓名：egon,年龄：19
+
+
+#==============================/=====================================================================
 
 004.property
 
-
-
-
 # property装饰器是用来将类内的函数属性伪装成数据属性
+# 什么是特性property
+# property是一种特殊的属性，访问它时会执行一段功能（函数）然后返回值
+
+
+# 例一：BMI指数（bmi是计算而来的，但很明显它听起来像是一个属性而非方法，如果我们将其做成一个属性，更便于理解）
+# 成人的BMI数值：
+# 过轻：低于18.5
+# 正常：18.5-23.9
+# 过重：24-27
+# 肥胖：28-32
+# 非常肥胖, 高于32
+# 　　体质指数（BMI）=体重（kg）÷身高^2（m）
+# 　　EX：70kg÷（1.75×1.75）=22.86
+
+
 # class People:
 #     def __init__(self,name,weight,height):
 #         self.name=name
@@ -448,11 +537,9 @@ a.withdraw()
 #         return self.weight / (self.height ** 2)
 #
 # obj=People('egon',80,1.83)
-# obj.height=1.85
-# obj.weight=75
+# print(obj.bmi)  #输出为23.888440980620498
 
-# print(obj.bmi())
-# print(obj.bmi)
+
 
 
 # 了解....
@@ -489,31 +576,35 @@ a.withdraw()
 
 
 
-class People:
-    def __init__(self,name):
-        self.__name=name
+# class People:
+#     def __init__(self,name):
+#         self.__name=name
+#
+#     def get_name(self):
+#         return '<名字:%s>' %self.__name
+#
+#     def set_name(self,obj):    #设置
+#         if type(obj) is not str:
+#             print('name必须为str类型')
+#             return
+#         self.__name=obj
+#
+#     def del_name(self):   #删除
+#         # print('不让删')
+#         del self.__name
+#
+#     name=property(get_name,set_name,del_name)
+#
+# obj=People('egon')
+#
+# # print(obj.name)
+# # obj.name='EGON'
+# # obj.name=123
+# # print(obj.name)
+#
+# del obj.name
+# print(obj.__dict__)
 
-    def get_name(self):
-        return '<名字:%s>' %self.__name
 
-    def set_name(self,obj):
-        if type(obj) is not str:
-            print('name必须为str类型')
-            return
-        self.__name=obj
 
-    def del_name(self):
-        # print('不让删')
-        del self.__name
-
-    name=property(get_name,set_name,del_name)
-
-obj=People('egon')
-
-# print(obj.name)
-# obj.name='EGON'
-# obj.name=123
-# print(obj.name)
-
-del obj.name
-print(obj.__dict__)
+#==============================/=====================================================================
