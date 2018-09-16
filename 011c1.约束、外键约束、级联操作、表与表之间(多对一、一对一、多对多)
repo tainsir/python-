@@ -1,0 +1,299 @@
+1.存储引擎
+
+2.建表的完整语句
+create table 表名 （字段名 数据类型[（长度） 约束]）
+长度
+    整型表示显示宽度
+    字符串表示存储长度限制
+
+3.数据类型
+    1.整型
+        tinyint smallint mediumint int bigint
+         1        2        3        4   8
+    2.浮点
+        FLOAT DOUBLE DECIMAL
+          4     8      手动指定长度
+         （m，d）
+         m是整体长度
+         d是小数长度
+
+
+    3.字符串
+        char定长 varchar变长
+
+        text  大文本
+        blob  没有编码的文本
+
+    * binary  bigbinary  存储二进制数据
+
+    4.时间日期
+        time
+        year
+        date
+        datetime
+        timestamp 1970 - 2037
+
+
+    5.集合与枚举
+        共同点： 只能放字符串类型  可以用序号来插入数据
+        不同点： 集合多选多  枚举多选一
+        集合使用序号插入时 只能插一个
+
+========================================================
+1.约束
+    not null
+    default
+    unique
+    primary key  ******
+    auto_increment ******
+    foreign key ******
+
+
+2.表之间的关联关系  ******
+    1.一对一
+    2.多对一
+    3.多对多
+
+
+
+周五： 单表查询
+       多表查询******
+       子查询******
+
+周一：  索引原理*******
+        查询优化*******
+
+
+周二： 试图 触发器 事务****** 存储过程  函数
+
+========================================================
+约束
+    什么是约束
+        除了数据类型以外额外添加的约束
+    为什么要使用约束
+        为了保证数据的合法性 完整性
+
+    分类：
+            not null 非空约束  数据不能为空
+                     学生表的姓名字段
+                    create table student (id ind,name char(10) not null);
+
+            default  默认值约束   可以指定字段的默认值
+            create table user (id ind,name char(10) not null,sex char(1) default "woman");
+                     美柚的性别字段 默认为女
+                     游戏 注册成功 送一万金币
+
+            unique   唯一性约束  该字段的值不能重复
+                     身份证 手机号 学号
+                     unique其实是一种索引
+                        索引是一种数据结构 用于提高查询效率
+
+                     可以为空
+                     一张表中可以有多个唯一约束
+
+                     单列唯一约束
+                     create table t5(idcard char(18) unique);
+                     多列联合唯一约束
+                     create table t6(idcard char(18),phonenumber char(11),unique(idcard,phonenumber));
+                     意思： 身份证相同 并且 手机号相同 那就叫相同
+
+
+            primary key  ******
+                称之为主键约束
+                用于唯一标识表中一条记录
+                    如何能做到唯一标识 该字段 只要是惟一的 并且不为空 即可
+                    也就是说 从约束的角度来看主键约束 和 非空 加 唯一约束 没有区别
+                    那它们之间的区别是什么？
+                    唯一约束 是一种索引 必然存在硬盘上的某个文件中  是物理层面（实实在在存在的数据）
+                    primary key 是一种逻辑意义上的数据 （实际上不存在）
+                    换句话说 主键 就是由 唯一约束 和非空约束 组成的约束
+                    就像 一男一女 可以组成夫妻 但是夫妻只是一种称呼 不实际存在
+
+            语法：
+                create table stu (stuid int primary key,name char(3));
+                create table t7(id int unique not null,name char(3));
+
+            有主键 和没有主键的区别？
+                1.无法区分两个相同记录 比如班级里有两个人名字相同
+                2.有主键则意味有这索引  效率更高
+                3.可以建立关联关系
+
+             多列联合主键：
+                create table t8(idcard char(18),phonenumber char(11),primary key(idcard,phonenumber));
+
+             要不要主键？
+                必须的 每个表都应该有主键 哪怕不用唯一标识 也应该考虑提升效率
+                主键的字段名 几乎都叫id
+             同一个表中可以不可以有多个主键？
+                不可以 没有任何意义
+             主键的类型需要设置为整型,当然别的也行！建议你别这么干！
+
+
+            练习
+            创建一个员工表 里面存储 员工信息 员工编号 姓名 年龄 性别
+            create table employee (id int primary key,name char(10) not null,age int not null,sex char(10) default "man");
+            插入数据
+            INSERT INTO employee VALUES(1,"杨总",20),(2,"egon",49),(3,"wxx",28);
+            问题?  你很可能忘记上一次的id到第几了 导致你要先查看一下
+                   麻烦影响效率  所以有了auto_increment
+
+
+            auto_increment ******
+                  中文  自动增长
+                  作用   通常搭配主键字段使用  可以自动为你的数据分配逐渐
+                    如何分配的?
+                    添加一条就自动加1  计数从1开始
+
+             语法: ******
+                create table t9(id int primary key auto_increment,name char(3));
+
+                如果主键是自动增长  你可以跳过这个字段 也可以为它插入null  都可以
+
+                修改自动增长的起始位置  **
+                alter table t9 auto_increment = 7;
+
+             注意: 自动增长 只能用于整型
+
+
+            foreign key ******
+
+
+========================================================
+为何要分表
+
+需求 见图1
+
+以上数据 存在
+1.数据冗余
+2.效率低下
+3.扩展性差
+通过分表可以解决上述问题
+新的问题? 不清楚员工是那个部门
+解决的办法 在员工表中添加字段保存部门的编号
+
+此时两个表之间就产生了关系
+员工属于 部门   部门包含员工
+可以称为主从关系
+部门表叫主表  员工表叫从表
+
+虽然有了关系 但是两个表之间还是没有任何物理联系,插一个不存在的部门也没问题
+
+
+========================================================
+外键约束*****
+
+mysql提供了 foreign key 专门用于为表和表之间 建立物理关联
+
+
+思考 表里存储的是一条条的记录
+     两个表之间能产生的关系有哪些?
+        现有 A B两张表
+        1.多对一
+        2.一对一
+        3.多对多
+
+      1.多对一
+      在查找表之间的关系时  要分别站在 不同表去思考
+        1. 从员工出发  员工对于部门来说 时 多个员工对应一个部门
+        2. 从部门出发  一个部门对应多个员工
+            如果两个得到的关系不同 则认为 这种多对一关系是单向
+
+
+      先创建部门表
+      create table dept(id int primary key auto_increment,name char(10),manager char(10));
+      在创建员工表
+      create table emp(id int primary key auto_increment,name char(10),dept_id int,foreign key(dept_id) references dept(id));
+
+
+        需求: 设计  学员表 和 班级表  五分钟练习
+              两个表多对一的关系  通过外键来进行关联
+              外键加在谁身上?   加到从表上
+              create table class(id int primary key auto_increment,name char(10));
+              create table student(id int primary key auto_increment,name char(10),c_id int,foreign key(c_id) references class(id));
+
+        总结: 外键的作用  表与表之间建立联系
+        添加外键约束时: 产生的限制
+                       被关联的表需要先被创建
+                       部门数据(主表)应该先插入   员工数据(从表)后插入
+                       在删除部门数据前(主表)前 要保证该部门的员工数据都删除了
+                       在更新部门编号前  要先保证没有员工关联到这个部门
+
+        简单的说 外键指的是 另一张的主键
+
+        外键加上以后 主表中的数据 删除 和更新时 都受到限制
+            解决的方案是为 外键 添加 级联操作
+
+
+========================================================
+级联操作
+            指的是就是同步更新和删除  (cascade级联)
+            语法:在创建外键时  在后面添加  on update cascade   同步更新
+                                           on delete cascade   同步删除
+
+              实例:
+              create table class(id int primary key auto_increment,name char(10));
+
+              create table student(
+              id int primary key auto_increment,
+              name char(10),
+              c_id int,
+              foreign key(c_id) references class(id)
+              on update cascade
+              on delete cascade
+              );
+
+               insert into class value(null,"python3期");
+               insert into student value(null,"罗傲宇",1);
+
+             对主表的id进行更新
+             以及删除某条主表记录 来验证效果
+
+========================================================
+多对多关系的处理:
+           建立一个第三方表  专门存储两个表之间的关系
+           这个关系表 应该有两个字段  分别关联学生的id  和老师的id
+           为了保证  数据的合法性 完整性 给这两个字段都添加外键约束
+               实例:  见图2
+               create table teacher (id int primary key auto_increment,name char(10));
+               create table student (id int primary key auto_increment,name char(10));
+               create table t_s (t_id int,
+               s_id int,
+               foreign key(t_id) references teacher(id),
+               foreign key(s_id) references student(id)
+               );
+
+               为了避免第三方表每行重复无用的关系数据用primary key，  关系表加上关联的主键约束用foreign key
+               create table t_s (t_id int,
+               s_id int,
+               foreign key(t_id) references teacher(id),
+               foreign key(s_id) references student(id),
+               primary key(t_id,s_id)
+               );
+
+               insert into student value(null,"lxx");
+               insert into teacher value(null,"exx");
+               insert into t_s value(1,1);
+
+========================================================
+========================================================
+一对一关系 ******
+生活中的一对一
+    客户表， 学员表
+    通过分析
+    一个客户只对应一个学员
+    一个学员只对应一个客户
+    所以确定关系为一对一
+
+    在mysql中通过外键来建立一对一
+
+    create table customer(id int primary key auto_increment,name char(10),phone char(11),sex char(1));
+    create table student(id int primary key auto_increment,name char(10),class char(11),sex char(1),
+            c_id int, foreign key(c_id) references  customer(id) on update cascade on delete cascade
+            );
+
+
+========================================================
+
+
+
+
