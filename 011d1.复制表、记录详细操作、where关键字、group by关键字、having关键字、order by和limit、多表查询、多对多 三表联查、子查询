@@ -1,0 +1,383 @@
+1.约束条件
+    not null
+    default
+    unique
+    primary key
+
+    auto_increment
+    foreign key
+
+    表之间的关系
+    多对一
+    多对多
+    一对一
+
+======================================================
+查询语句
+    1.完整查询语句
+    2.一堆关键字
+        关键字的执行顺序
+    3.单表查询
+         [where 条件      ******
+        group by 字段名   ***
+        having 条件       ***
+        order by 字段名   *****
+        limit 显示的条数] *******
+    4.多表查询  *******
+
+    5.子查询
+======================================================
+
+
+======================================================
+
+拷贝表 ***
+
+create table copy_table select *from customer ;
+拷贝结构 与数据
+create table copy_table select *from customer where 0 > 1;
+仅拷贝结构
+
+共同点： 索引 不能拷贝   描述不能拷贝（自增）
+
+======================================================
+记录详细操作
+
+以下语法中
+[] 表示可选的
+{}表示必选的
+增
+    insert [into] 表名[字段名] value|values(字段值....);
+    into 可省略
+    [字段名] 可选
+        如果写了 你后面的值 必须与 写的字段匹配
+        不写  后面的值 必须和表的结构完全匹配
+    value 插入一条记录
+    values 插入多条记录
+
+改
+    update 表名 set 字段名 = 新的值[,字段n = 新值n]  [where 条件]
+    可以同时修改多个字段 用逗号隔开   注意最后一个字段不能加逗号
+    where 可选
+        有就 修改满足条件的记录
+        没有就全部修改
+删
+    delete from 表名 [where 条件]
+    where 可选
+        有就 删除满足条件的记录
+        没有就全部删除
+        如果你需要全部删除 请使用truncate table 表名
+        delete 是逐行比对  删除 效率低
+        delete删除的行号会保留
+
+查询
+    完整的查询语句
+    select  [distinct] {* | 字段名 | 聚合函数 | 表达式} from 表名
+        [where 条件
+        group by 字段名
+        having 条件
+        order by 字段名
+        limit 显示的条数]
+
+    注意： 关键字的顺序必须与上述语法一致
+
+
+    简单查询 ******
+
+    1.* 表示所有列 都显示
+    2.也可以手动指定要显示的列  可以是多个
+    3.distinct 用于去除重复的记录
+        只取出完全相同的记录
+        当然 你也可以手动指定要显示的列 从而来去重
+   4.表达式  支持四则运算
+
+
+    执行顺序
+     def select()
+        from() 打开文件
+        where() 读取每一行并判断是否满足条件
+        group() 对数据进行分组
+        having() 再分组之后进行过滤     having不单独出现 仅用于分组之后进行过滤
+        distinct() 去重
+        order() 用于对筛选后的数据 进行排序
+        limit() 限制显示的条数
+        最后根据select后制定的字段来显示数据
+
+准备数据：
+create table stu(id int primary key auto_increment,name char(10),math float,english float);
+insert into stu values(null,"赵云",90,30);
+insert into stu values(null,"小乔",90,60);
+insert into stu values(null,"小乔",90,60);
+insert into stu values(null,"大乔",10,70);
+insert into stu values(null,"李清照",100,100);
+insert into stu values(null,"铁拐李",20,55);
+insert into stu values(null,"小李子",20,55);
+    查询所有人的总成绩
+
+select name,english+math 总分 from stu;
+select name,english+10 英语 from stu;
+需要 在字段的数据前加上字段名:
+ name:赵云   english:90  math:30
+ 需要使用字符串拼接函数
+ concat(字符串)
+
+ 案列：
+ select
+ concat("name:",name),
+ concat("english:",english),
+  concat("math:",math)
+  from stu;
+
+
+观光代码 **
+select
+(case
+    when english + math < 150 then
+        concat(name," shit")
+    when english + math >= 150 then
+        concat(name," nice")
+end) 评语 from stu;
+
+======================================================
+where关键字
+    从硬盘上读取数据时的一个过滤条件
+
+    where支持的运算符见图1
+
+    where 的筛选过程
+    在没有索引的情况下  挨个比较  效率低
+    所以我们应该给表添加索引
+
+======================================================
+
+group by关键字
+
+    作用 用于给数据分组
+    为什么要分组？  思考生活为什么要分组
+    1.在生活中是为了方便管理
+    2.在数据库中是为了 方便统计
+
+    准备数据
+    create table emp (id int,name char(10),sex char,dept char(10),job char(10),salary double);
+    insert into emp values (1,"刘备","男","市场","总监",5800),
+     (2,"张飞","男","市场","员工",3000),
+      (3,"关羽","男","市场","员工",4000),
+       (4,"孙权","男","行政","总监",6000),
+        (5,"周瑜","男","行政","员工",5000),
+         (6,"小乔","女","行政","员工",4000),
+          (7,"曹操","男","财务","总监",10000),
+           (8,"司马懿","男","财务","员工",6000);
+
+     按照部门给数据分组
+     select *from emp group by dept;
+     有两种情况
+     1.sql_mode中 没有设置 ONLY_FULL_GROUP_BY 显示每个组的第一条记录 没有意义 所以新版中 自带ONLY_FULL_GROUP_BY
+     2.sql_mode中有设置 ONLY_FULL_GROUP_BY  直接报错
+        原因是：  * 表示所有字段都要显示  但是 分组后 记录的细节被隐藏 只留下了
+        这意味着：只有出现在group by 后面的字段才能被显示
+        分组是为了统计分组数据  如何统计？
+        需要使用到聚合函数
+
+
+聚合函数：
+    将一堆数据经过计算，得到一个数据
+    sum() 求和
+    avg() 求平均数
+    max()/min() 求最大值 / 最小值
+    count() 个数
+
+
+2.查询每个部⻔门有⼏几个⼈人
+select dept,count(*) from emp group by dept;
+
+3.计算每个部⻔门的平均⼯工资
+select avg(salary) from emp  group by dept;
+
+总结 什么时候需要使用分组   只要你的需求中 带有 每个这样的字眼 就需要分组
+    每个岗位  每个部门  每个性别
+
+5.查询平均⼯工资⼤大于5000的部⻔
+    # 错误，select avg(salary) from emp where avg(salary) > 5000 group by dept;
+    where 语句后面 不能使用聚合函数
+    select avg(salary) from emp；
+
+    总结where 条件不能用于筛选分组后的数据
+
+
+    group_concat 用于分组后 将组中的某些字段拼接成字符串
+    select  dept,group_concat(name) from emp group by dept;
+
+    其实 没啥意义  为啥？  你为什么要分组？是为了统计数据    如果你不需要统计 就没有必要分组
+
+======================================================
+
+having关键字
+    用于对分组后的数据进行过滤
+    having不会单独出现 都是和group by 一起出现
+
+    与where的区别
+        相同点： 都用于过滤数据
+        不同点：
+                1.where是最先执行   用于读取硬盘数据
+                  having 要等到数据读取完之后 才能进过滤 比where晚执行
+                2.where中不能使用聚合函数
+                  having中可以
+
+        需求：
+      5.查询平均⼯工资⼤大于5000的部⻔
+      select dept,avg(salary) from emp group by dept having avg(salary) > 500;
+      其中select后的dept avg顺序不同，列的顺序也不同
+      6.查询工资最高的人的姓名和他的工资
+        需要用到子查询
+
+    是什么 干什么 怎么用？
+
+
+=============================================================
+
+order by [desc,asc]
+    用于对记录进行 排序
+
+    desc为降序
+    asc为升序
+
+    按照工资的从低到高顺序 显示所有的员工
+    select *from emp order by salary;
+    默认为升序
+
+    修改为降序
+    select *from emp order by salary desc;
+
+    按照每个部门的平均工资 降序排序
+    select dept,avg(salary) from emp group by dept order by avg(salary) desc;
+
+
+limit  *******
+    用于限制显示的条数
+    limit [start,]count
+
+    # 看看表里前三条数据
+    select *from emp limit 3;
+
+    # 看看表里的3-5条
+    select * from emp limit 2,3;
+
+    # 查看工资最高的那个人的信息
+    select *from emp order by salary desc limit 1;
+
+    limit 常用于 数据的分页展示  比如腾讯新闻 的上拉加载新的而一页
+    select *from emp limit 0,10; 第一页     页数 减1  乘以条数 得到起始位置
+    select *from emp limit 10,10; 第2页
+    select *from emp limit 20,10; 第3页
+
+=============================================================
+多表查询
+    在多个表中查询需要的数据
+    例如：有班级表 和学生表
+        给你已给班级名称  请查询所有的学员数据
+        先查班级表 得到一个班级的id  再根据id去学院表查询对应的学员
+
+    准备数据：
+    create table emp (id int,name char(10),sex char,dept_id int);
+     insert emp values(1,"大黄","m",1);
+     insert emp values(2,"老王","m",2);
+     insert emp values(3,"老李","w",30);
+
+    create table dept (id int,name char(10));
+    insert dept values(1,"市场");
+    insert dept values(2,"财务");
+    insert dept values(3,"行政");
+
+    多表查询的方式
+    1.笛卡尔积查询
+        什么是笛卡尔积,用坐标中的一条记录 去链接另一张表的所有记录
+        就像是把 两张表的数据做了一个乘法
+        这将导致 产生大量的无用重复数据
+            我们要的效果是：员工表中的部门id 与 部门表中的id相同 就拼接在一起
+        用 where 筛选出正确的数据
+      select *from emp,dept where emp.dept_id = dept.id;
+
+      on关键字
+        作用 用于多表查询是 进行条件限制
+        # 错误，select *from emp,dept on emp.dept_id = dept.id;  这是错误的语法  因为 on 它只能用在专门多表查询语句中
+
+
+      2.内连接查询
+        inner join         内部右侧加列      当....时候
+        select *from emp inner join dept  on emp.dept_id = dept.id;
+
+       # 查询 所有的员工以及他们所属的部门信息
+      3.左外连接
+        left join
+       左边表中的数据完全显示   右边表中的数据匹配上才显示
+       select *from emp left join dept  on emp.dept_id = dept.id;
+
+       # 查询 所有的部门以及他们所有的员工信息
+      4.右外连接
+        right join
+        左边表中的数据匹配上才显示   右边表中的数据完全显示
+        select *from emp right join dept  on emp.dept_id = dept.id;
+
+       # 在一个表中 显示多个表中的所有数据
+      5. 全外链接
+        full join  mysql不支持  oracle支持
+        可以通过union 间接实现
+                        union  表示合并查询  意思是把多个查询结果合并在一起显示
+                        要求是 被合并的表结构必须相同
+                        默认去除重复
+
+                        合并但是不去除重复
+                        union all
+
+       select *from emp right join dept  on emp.dept_id = dept.id
+       union
+       select *from emp left join dept  on emp.dept_id = dept.id;
+
+
+      总结：多表链接 在书写时 按照填空来书写   如果左边要全部显示 用left join
+            右边全部显示 用right join
+            全部显示 把左链接的结果和右链接的结果 合并
+            当然 也可以更多表一起查 但是 没有意义  并且你要尽量避免 太多表 一起查
+            最多三张 在多对多的时候
+
+    select *from emp left join dept left join xxtable on emp.dept_id = dept.id;
+
+
+===============================================================
+多对多 三表联查
+create table tec(id int,name char(10));
+insert into tec value(1,"egon");
+insert into tec value(2,"yyh");
+
+create table stu(id int,name char(10));
+insert into stu value(1,"大傻");
+insert into stu value(2,"中傻");
+insert into stu value(3,"小傻");
+create table s_t(s_id int,t_id int);
+insert into s_t value(1,2);
+insert into s_t value(2,2);
+insert into s_t value(3,1);
+
+需求  找出 yyh 这个老师 教过的学生信息
+思路：
+    第一步 到关系表中 去查询 哪些老师教过哪些学生（学生的id）  形成了一个临时表
+    第二步  将上一步得到临时表 与 学生表进行连接
+    第三步 加上额外的筛选条件   老师的name  是  yyh
+
+
+    select tec.name teacher,stu.name student from
+    tec inner join s_t on tec.id = s_t.t_id
+    inner join stu on s_t.s_id = stu.id
+    where tec.name = "egon" ;
+
+===============================================================
+子查询
+    什么是子查询：将上一次查询的结果 作为本次查询的原始数据（或是查询条件）
+
+    需求 查询出工资最高的人的信息
+    先查询出 财务部 最高工资是多少
+    拿着最高工资 去表中看 谁的工资和最高工资匹配
+    select *from emp2 where salary = (select max(salary) from emp1);
+
+
+
